@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"module": "commonjs",
+		"target": "es2018",
+		"jsx": "preserve",
+		"noImplicitAny": false,
+		"removeComments": false,
+		"sourceMap": false,
+		"outDir": "./out"
+	},
+	"exclude": [
+		"node_modules",
+		"**/node_modules/*"
+	]
+}
