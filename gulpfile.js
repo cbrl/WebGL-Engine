@@ -1,5 +1,4 @@
 var gulp = require("gulp");
-var ts = require("gulp-typescript");
 var tsConfig = require("./tsconfig.json");
 var source = require('vinyl-source-stream');
 var browserify = require("browserify");
