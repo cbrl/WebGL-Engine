@@ -50,7 +50,7 @@ class Program {
 		this.createProgram(context);
 	}
 
-	createProgram(context): void {
+	createProgram(context: WebGLRenderingContext): void {
 		var program = context.createProgram();
 		context.attachShader(program, this._vertex_shader.getShader());
 		context.attachShader(program, this._fragment_shader.getShader());

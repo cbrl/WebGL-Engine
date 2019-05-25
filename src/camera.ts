@@ -9,7 +9,7 @@ abstract class Camera {
 	protected _z_near: number = 0.1;
 	protected _z_far: number = 100;
 
-	get z_near() {
+	get z_near(): number {
 		return this._z_near;
 	}
 
@@ -25,7 +25,7 @@ abstract class Camera {
 		this._z_near = value;
 	}
 
-	get z_far() {
+	get z_far(): number {
 		return this._z_far;
 	}
 
@@ -53,11 +53,11 @@ class OrthographicCamera extends Camera {
 		this.ortho_size = ortho_size
 	}
 
-	get ortho_size() {
+	get ortho_size(): [number, number] {
 		return this._ortho_size;
 	}
 
-	set ortho_size(value) {
+	set ortho_size(value: [number, number]) {
 		if (value.length != 2) {
 			console.log("OrthographicCamera.ortho_size() value should have length of 2, but length is", value.length);
 			return;

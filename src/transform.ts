@@ -1,9 +1,9 @@
 import { vec3, quat, mat4 } from "./gl-matrix";
 
 export class Transform {
-	private _translation = vec3.create();
-	private _rotation = quat.create();
-	private _scale = vec3.fromValues(1, 1, 1);
+	private _translation: [number, number, number] = vec3.create();
+	private _rotation: [number, number, number, number] = quat.create();
+	private _scale: [number, number, number] = vec3.fromValues(1, 1, 1);
 
 	translateX(units: number): void {
 		this.translation[0] += units;
