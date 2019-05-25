@@ -6,7 +6,7 @@
 		"noImplicitAny": false,
 		"removeComments": false,
 		"sourceMap": false,
-		"outDir": "./out"
+		"outDir": "./tsc_build"
 	},
 	"exclude": [
 		"node_modules",

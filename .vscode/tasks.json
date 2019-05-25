@@ -22,21 +22,6 @@
 			}
 		},
 		{
-			"label": "Build & Browserify",
-			"type": "shell",
-			"command": "tsc; browserify ./out/engine.js > ./bundle.js",
-			"options": {
-				"cwd": "${workspaceRoot}"
-			},
-			"problemMatcher": [
-				"$tsc"
-			],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
 			"label": "Typescript Build",
 			"type": "typescript",
 			"tsconfig": "tsconfig.json",

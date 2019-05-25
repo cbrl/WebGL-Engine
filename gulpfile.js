@@ -5,7 +5,7 @@ var source = require('vinyl-source-stream');
 var browserify = require("browserify");
 var tsify = require("tsify");
 var paths = {
-    pages: ['main.html']
+    pages: ['src/*.html']
 };
 
 gulp.task("copy-html", function () {
@@ -17,7 +17,7 @@ gulp.task("default", gulp.series(gulp.parallel('copy-html'), function () {
     return browserify({
         basedir: '.',
         debug: true,
-        entries: ['engine.ts'],
+        entries: ['src/engine.ts'],
         cache: {},
         packageCache: {}
     })
