@@ -3,7 +3,7 @@ import { Transform } from "./transform";
 import { mat4 } from "./gl-matrix";
 
 
-abstract class Camera {
+export abstract class Camera {
 	public transform: Transform = new Transform();
 	public viewport: Viewport = new Viewport();
 	protected _z_near: number = 0.1;

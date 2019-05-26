@@ -1,14 +1,22 @@
 import { Engine } from "./engine";
 import { Shape } from "./shape";
-import { PerspectiveCamera, OrthographicCamera } from "./camera";
+import { Camera, PerspectiveCamera, OrthographicCamera } from "./camera";
 import { VertexPositionColor } from "./vertex";
 import { vec3 } from "./gl-matrix";
 
-export class Scene {
+export abstract class Scene {
 	shapes: Shape[] = [];
-	camera: PerspectiveCamera = new PerspectiveCamera();
+	camera: Camera;
+	abstract load(): void;
+	abstract update(): void;
+}
 
-	constructor() {}
+export class TestScene extends Scene {
+
+	constructor() {
+		super();
+		this.camera = new PerspectiveCamera();
+	}
 
 	load(): void {
 		var context: WebGLRenderingContext = Engine.rendering_mgr.context;
@@ -25,5 +33,9 @@ export class Scene {
 		];
 		
 		this.shapes.push(new Shape(context, vertices));
+	}
+
+	update(): void {
+
 	}
 }

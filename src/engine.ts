@@ -1,5 +1,5 @@
 import { RenderingMgr } from "./rendering_mgr";
-import { Scene } from "./scene";
+import { Scene, TestScene } from "./scene";
 
 export class Engine {
 	static instance: Engine = new Engine();
@@ -16,7 +16,7 @@ export class Engine {
 		document.body.appendChild(button);
 		button.textContent = "Load Scene";
 		button.addEventListener("click", () => {
-			Engine.setScene(new Scene());
+			Engine.setScene(new TestScene());
 			this.render();
 		});
 	}
