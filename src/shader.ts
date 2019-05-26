@@ -76,8 +76,11 @@ class Program {
 		return this._program;
 	}
 
-	bind(context: WebGLRenderingContext): void {
+	bindProgram(context: WebGLRenderingContext): void {
 		context.useProgram(this._program);
+	}
+	
+	bindVertexDescs(context: WebGLRenderingContext): void {
 		for (const desc of this._vertex_descs) {
 			desc.bind(context, this._program);
 		}
