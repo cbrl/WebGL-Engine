@@ -4,7 +4,7 @@ class Shader {
 	_shader: WebGLShader;
 
 	constructor(context: WebGLRenderingContext, type: number, source: string) {
-		var shader = context.createShader(type);
+		var shader: WebGLShader = context.createShader(type);
 		context.shaderSource(shader, source);
 		context.compileShader(shader);
 		const success = context.getShaderParameter(shader, WebGLRenderingContext.COMPILE_STATUS);
@@ -51,7 +51,7 @@ class Program {
 	}
 
 	createProgram(context: WebGLRenderingContext): void {
-		var program = context.createProgram();
+		var program: WebGLProgram = context.createProgram();
 		context.attachShader(program, this._vertex_shader.getShader());
 		context.attachShader(program, this._fragment_shader.getShader());
 		

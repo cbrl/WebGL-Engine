@@ -11,7 +11,7 @@ export class Scene {
 	constructor() {}
 
 	load(): void {
-		var context = Engine.rendering_mgr.context;
+		var context: WebGLRenderingContext = Engine.rendering_mgr.context;
 		
 		this.camera.transform.translation = vec3.fromValues(0, 0, 3);
 
