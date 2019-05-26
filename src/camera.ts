@@ -41,7 +41,7 @@ abstract class Camera {
 		this._z_far = value;
 	}
 
-	abstract getCameraToProjectionMatrix(): number[];
+	abstract get camera_to_projection_matrix(): number[];
 }
 
 
@@ -65,7 +65,7 @@ class OrthographicCamera extends Camera {
 		this._ortho_size = value;
 	}
 	
-	getCameraToProjectionMatrix(): number[] {
+	get camera_to_projection_matrix(): number[] {
 		var matrix = mat4.create();
 		mat4.ortho(matrix, 0, this._ortho_size[0], 0, this._ortho_size[1], this._z_near, this._z_far);
 		return matrix;
@@ -80,7 +80,7 @@ class PerspectiveCamera extends Camera {
 		this.fov_y = fov_y;
 	}
 	
-	getCameraToProjectionMatrix(): number[] {
+	get camera_to_projection_matrix(): number[] {
 		var matrix = mat4.create();
 		mat4.perspective(matrix, this.fov_y, this.viewport.aspect_ratio, this._z_near, this._z_far);
 		return matrix;

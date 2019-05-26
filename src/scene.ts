@@ -13,7 +13,7 @@ export class Scene {
 	load(): void {
 		var context = Engine.rendering_mgr.context;
 		
-		this.camera.transform.translation = vec3.fromValues(0, 0, -3);
+		this.camera.transform.translation = vec3.fromValues(0, 0, 3);
 
 		var vertices = [
 			new VertexPositionColor([ 0,    1,   0], [1, 0, 0]),

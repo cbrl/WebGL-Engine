@@ -85,13 +85,13 @@ export class Transform {
 		return this._scale;
 	}
 
-	getObjectToWorldMatrix(): number[] {
+	get object_to_world_matrix(): number[] {
 		var matrix = mat4.create();
 		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale);
 		return matrix;
 	}
 
-	getWorldToObjectMatrix(): number[] {
+	get world_to_object_matrix(): number[] {
 		var matrix = mat4.create();
 		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale)
 		mat4.invert(matrix, matrix);
