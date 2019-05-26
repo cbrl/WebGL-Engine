@@ -7,7 +7,7 @@ class Shader {
 		var shader = context.createShader(type);
 		context.shaderSource(shader, source);
 		context.compileShader(shader);
-		var success = context.getShaderParameter(shader, WebGLRenderingContext.COMPILE_STATUS);
+		const success = context.getShaderParameter(shader, WebGLRenderingContext.COMPILE_STATUS);
 		if (success) {
 			this._shader = shader;
 		}
@@ -56,14 +56,14 @@ class Program {
 		context.attachShader(program, this._fragment_shader.getShader());
 		
 		context.linkProgram(program);
-		var link_success = context.getProgramParameter(program, WebGLRenderingContext.LINK_STATUS);
+		const link_success = context.getProgramParameter(program, WebGLRenderingContext.LINK_STATUS);
 		if (!link_success) {
 			console.error("Program link error: ", context.getProgramInfoLog(program));
 			context.deleteProgram(program);
 		}
 
 		context.validateProgram(program);
-		var validate_success = context.getProgramParameter(program, WebGLRenderingContext.VALIDATE_STATUS);
+		const validate_success = context.getProgramParameter(program, WebGLRenderingContext.VALIDATE_STATUS);
 		if (!validate_success) {
 			console.error("Program validation error: ", context.getProgramInfoLog(program));
 			context.deleteProgram(program);
@@ -78,7 +78,7 @@ class Program {
 
 	bind(context: WebGLRenderingContext): void {
 		context.useProgram(this._program);
-		for (let desc of this._vertex_descs) {
+		for (const desc of this._vertex_descs) {
 			desc.bind(context, this._program);
 		}
 	}

@@ -43,19 +43,19 @@ export class Renderer {
 		// Must bind program before setting attributes
 		this._program.bind(this._context);
 		
-		var world_to_camera: number[] = scene.camera.transform.world_to_object_matrix;
-		var camera_to_projection: number[] = scene.camera.camera_to_projection_matrix;
+		const world_to_camera: number[] = scene.camera.transform.world_to_object_matrix;
+		const camera_to_projection: number[] = scene.camera.camera_to_projection_matrix;
 
-		var view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_view");
-		var proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_proj");
+		const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_view");
+		const proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_proj");
 
 		this._context.uniformMatrix4fv(view_loc, false, world_to_camera);
 		this._context.uniformMatrix4fv(proj_loc, false, camera_to_projection);
 
-		for (let shape of scene.shapes) {
-			var object_to_world: number[] = shape.transform.object_to_world_matrix;
+		for (const shape of scene.shapes) {
+			const object_to_world: number[] = shape.transform.object_to_world_matrix;
 			
-			var world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_world");
+			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_world");
 			this._context.uniformMatrix4fv(world_loc, false, object_to_world);
 
 			shape.render(this._context);

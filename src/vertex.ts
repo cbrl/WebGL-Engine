@@ -60,7 +60,7 @@ function VertexArrayToFloat32Array(vertex_array: Vertex[]): Float32Array {
 	var data: number[] = [];
 	vertex_array.forEach(vertex => {
 		//data.push(...Object.values(vertex).flat());
-		var values: number[][] = Object.keys(vertex).map((key: string) => vertex[key]);
+		const values: number[][] = Object.keys(vertex).map((key: string) => vertex[key]);
 		values.forEach((value: number[]) => {
 			data.push(...value);
 		});
