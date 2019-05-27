@@ -43,11 +43,12 @@ export class Renderer {
 		const world_to_camera: number[] = scene.camera.transform.world_to_object_matrix;
 		const camera_to_projection: number[] = scene.camera.camera_to_projection_matrix;
 
-		// Must bind program before setting attributes
+		// Must bind program before binding attributes
 		this._program.bindProgram(this._context);
 
 		for (const shape of scene.shapes) {
-			this._program.bindVertexDescs(this._context);
+			shape.bindVertexBuffer(this._context); //Bind the shape's vertex buffer
+			this._program.bindVertexDescs(this._context); //After binding the vertex buffer, bind the vertex attributes
 			
 			const object_to_world: number[] = shape.transform.object_to_world_matrix;
 
