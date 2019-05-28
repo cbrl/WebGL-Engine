@@ -31,6 +31,9 @@ export class Engine {
 	}
 
 	static setScene(scene: Scene): void {
+		if (Engine._instance._scene)
+			Engine._instance._scene.unload();
+			
 		Engine._instance._scene = scene;
 		Engine._instance._scene.load();
 	}
