@@ -22,15 +22,43 @@ export class Engine {
 		});
 	}
 
+	//--------------------------------------------------------------------------------
+	// Static methods
+	//--------------------------------------------------------------------------------
+
 	static get rendering_mgr(): RenderingMgr {
-		return Engine._instance._rendering_mgr;
+		return Engine._instance.rendering_mgr;
 	}
 
 	static get scene(): Scene {
-		return Engine._instance._scene;
+		return Engine._instance.scene;
 	}
 
 	static setScene(scene: Scene): void {
+		Engine._instance.scene = scene;
+	}
+
+	static run(): void {
+		Engine._instance.run();
+	}
+
+	static stop(): void {
+		Engine._instance.stop();
+	}
+
+	//--------------------------------------------------------------------------------
+	// Member methods
+	//--------------------------------------------------------------------------------
+
+	private get rendering_mgr(): RenderingMgr {
+		return this._rendering_mgr;
+	}
+
+	private get scene(): Scene {
+		return this._scene;
+	}
+
+	private set scene(scene: Scene) {
 		if (Engine._instance._scene)
 			Engine._instance._scene.unload();
 			
@@ -38,12 +66,12 @@ export class Engine {
 		Engine._instance._scene.load();
 	}
 
-	static run(): void {
+	private run(): void {
 		Engine._instance._running = true;
 		window.requestAnimationFrame(Engine._instance.update.bind(Engine._instance));
 	}
 
-	static stop(): void {
+	private stop(): void {
 		Engine._instance._running = false;
 	}
 
