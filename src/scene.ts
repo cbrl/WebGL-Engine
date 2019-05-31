@@ -1,12 +1,16 @@
 import { Engine } from "./engine";
+import { ECS, Entity, Component } from "./ecs";
 import { Shape } from "./shape";
 import { Camera, PerspectiveCamera, OrthographicCamera } from "./camera";
 import { VertexPositionColor } from "./vertex";
 import { vec3 } from "./gl-matrix";
 
 export abstract class Scene {
+	ecs: ECS = new ECS();
 	shapes: Shape[] = [];
 	camera: Camera;
+
+	constructor() {}
 
 	// Called when a scene is being loaded by the engine
 	abstract load(): void;
@@ -17,6 +21,7 @@ export abstract class Scene {
 	// Called every tick
 	abstract update(): void;
 }
+
 
 export class TestScene extends Scene {
 
@@ -38,7 +43,7 @@ export class TestScene extends Scene {
 			new VertexPositionColor([ 0.5,  0,   0], [1, 1, 0]),
 			new VertexPositionColor([-0.5,  0,   0], [1, 0, 1]),
 		];
-		
+
 		this.shapes.push(new Shape(context, vertices));
 	}
 
