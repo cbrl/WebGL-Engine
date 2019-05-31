@@ -23,8 +23,8 @@ class Entity {
 		return this.components.has(type.constructor.name);
 	}
 
-	getComponent<T extends typeof Component>(type: T): Component | null {
-		return this.components.get(type.constructor.name);
+	getComponent<T extends Component>(type: new(...args: any[]) => T): T | null {
+		return <T>this.components.get(type.name);
 	}
 
 	removeComponent<T extends Component>(component: T): boolean {
@@ -53,8 +53,8 @@ abstract class System {
 
 
 class ECS {
-	entities = new Map();
-	systems = new Map();
+	entities: Map<string, Entity> = new Map();
+	systems: Map<string, System> = new Map();
 
 	constructor() {
 	}
@@ -78,8 +78,8 @@ class ECS {
 	}
 
 
-	addSystem<T extends System>(c: new(...args: any[]) => T, ...args: any[]): T {
-		var system: T = new c(...args);
+	addSystem<T extends System>(type: new(...args: any[]) => T, ...args: any[]): T {
+		var system: T = new type(...args);
 		system.setECS(this);
 		this.systems.set(system.constructor.name, system);
 		return system;

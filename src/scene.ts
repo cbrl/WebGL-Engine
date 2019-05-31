@@ -1,5 +1,5 @@
 import { Engine } from "./engine";
-import { ECS, Entity, Component } from "./ecs";
+import { ECS, Entity, Component, System } from "./ecs";
 import { Shape } from "./shape";
 import { Camera, PerspectiveCamera, OrthographicCamera } from "./camera";
 import { VertexPositionColor } from "./vertex";
