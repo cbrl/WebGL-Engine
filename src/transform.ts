@@ -51,8 +51,8 @@ export class Transform {
 		return this._rotation;
 	}
 
-	set rotation(quat: Float32Array) {
-		this._rotation = quat;
+	set rotation(rotation_quat: Float32Array) {
+		this._rotation = rotation_quat;
 	}
 
 	set euler_angles(degrees: Float32Array) {
