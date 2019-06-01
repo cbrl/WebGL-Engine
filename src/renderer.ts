@@ -40,8 +40,8 @@ export class Renderer {
 	}
 
 	render(scene: Scene): void {
-		const world_to_camera: number[] = scene.camera.transform.world_to_object_matrix;
-		const camera_to_projection: number[] = scene.camera.camera_to_projection_matrix;
+		const world_to_camera: Float32Array = scene.camera.transform.world_to_object_matrix;
+		const camera_to_projection: Float32Array = scene.camera.camera_to_projection_matrix;
 
 		// Must bind program before binding attributes
 		this._program.bindProgram(this._context);
@@ -50,7 +50,7 @@ export class Renderer {
 			shape.bindVertexBuffer(this._context); //Bind the shape's vertex buffer
 			this._program.bindVertexDescs(this._context); //After binding the vertex buffer, bind the vertex attributes
 			
-			const object_to_world: number[] = shape.transform.object_to_world_matrix;
+			const object_to_world: Float32Array = shape.transform.object_to_world_matrix;
 
 			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_world");
 			const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_view");
