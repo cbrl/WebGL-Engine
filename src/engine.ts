@@ -17,7 +17,7 @@ export class Engine {
 		document.body.appendChild(button);
 		button.textContent = "Load Scene";
 		button.addEventListener("click", () => {
-			Engine.setScene(new TestScene());
+			Engine.scene = new TestScene();
 			Engine.run();
 		});
 	}
@@ -26,6 +26,10 @@ export class Engine {
 	// Static methods
 	//--------------------------------------------------------------------------------
 
+	static get canvas(): HTMLCanvasElement {
+		return Engine._instance._canvas;
+	}
+	
 	static get rendering_mgr(): RenderingMgr {
 		return Engine._instance.rendering_mgr;
 	}
@@ -34,7 +38,7 @@ export class Engine {
 		return Engine._instance.scene;
 	}
 
-	static setScene(scene: Scene): void {
+	static set scene(scene: Scene) {
 		Engine._instance.scene = scene;
 	}
 
