@@ -19,8 +19,8 @@ class Entity {
 		return component;
 	}
 
-	hasComponent(type: Component): boolean {
-		return this.components.has(type.constructor.name);
+	hasComponent<T extends typeof Component>(type: T): boolean {
+		return this.components.has(type.name);
 	}
 
 	getComponent<T extends Component>(type: new(...args: any[]) => T): T | null {
@@ -40,7 +40,7 @@ abstract class Component {
 
 
 abstract class System {
-	private ecs: ECS;
+	protected ecs: ECS;
 	
 	constructor() {}
 
@@ -102,13 +102,13 @@ class ECS {
 
 
 	// Parameters: [component_type_1, component_type_2, ...], function(Entity) => void
-	forEach<T extends Component>(component_types: T[], func: (e: Entity) => void): void {
+	forEach<T extends typeof Component>(component_types: T[], func: (e: Entity) => void): void {
 		this.entities.forEach((entity: Entity) => {
 			var valid: boolean = true;
-			for (let i: number = 0; i < component_types.length; ++i) {
-				if (!entity.hasComponent(component_types[i]))
+			component_types.forEach((type: T) => {
+				if (!entity.hasComponent(type))
 					valid = false;
-			}
+			});
 			if (valid) {
 				func(entity);
 			}
