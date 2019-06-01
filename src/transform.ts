@@ -43,8 +43,8 @@ export class Transform {
 		quat.rotateZ(this.rotation, this.rotation, rad);
 	}
 
-	rotate(quat): void {
-		quat.multiply(this.rotation, quat, this.rotation);
+	rotate(rotation_quat: Float32Array): void {
+		quat.multiply(this.rotation, rotation_quat, this.rotation);
 	}
 
 	get rotation(): Float32Array {
