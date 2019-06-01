@@ -1,9 +1,9 @@
 import { vec3, quat, mat4 } from "./gl-matrix";
 
 export class Transform {
-	private _translation: number[] = vec3.create();
-	private _rotation: number[] = quat.create();
-	private _scale: number[] = vec3.fromValues(1, 1, 1);
+	private _translation: Float32Array = vec3.create();
+	private _rotation: Float32Array = quat.create();
+	private _scale: Float32Array = vec3.fromValues(1, 1, 1);
 
 	translateX(units: number): void {
 		this.translation[0] += units;
@@ -17,17 +17,17 @@ export class Transform {
 		this.translation[2] += units;
 	}
 
-	translate(units: number[]): void {
+	translate(units: Float32Array): void {
 		this.translateX(units[0]);
 		this.translateY(units[1]);
 		this.translateZ(units[2]);
 	}
 
-	get translation(): number[] {
+	get translation(): Float32Array {
 		return this._translation;
 	}
 
-	set translation(units: number[]) {
+	set translation(units: Float32Array) {
 		this._translation = units;
 	}
 
@@ -47,15 +47,15 @@ export class Transform {
 		quat.multiply(this.rotation, quat, this.rotation);
 	}
 
-	get rotation(): number[] {
+	get rotation(): Float32Array {
 		return this._rotation;
 	}
 
-	set rotation(quat: number[]) {
+	set rotation(quat: Float32Array) {
 		this._rotation = quat;
 	}
 
-	set euler_angles(degrees: number[]) {
+	set euler_angles(degrees: Float32Array) {
 		quat.fromEuler(this.rotation, degrees[0], degrees[1], degrees[2]);
 	}
 
@@ -71,27 +71,27 @@ export class Transform {
 		this._scale[2] *= units;
 	}
 
-	scaleBy(units: number[]): void {
+	scaleBy(units: Float32Array): void {
 		this.scaleByX(units[0]);
 		this.scaleByY(units[1]);
 		this.scaleByZ(units[2]);
 	}
 
-	set scale(units: number[]) {
+	set scale(units: Float32Array) {
 		this._scale = units;
 	}
 
-	get scale(): number[] {
+	get scale(): Float32Array {
 		return this._scale;
 	}
 
-	get object_to_world_matrix(): number[] {
+	get object_to_world_matrix(): Float32Array {
 		var matrix = mat4.create();
 		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale);
 		return matrix;
 	}
 
-	get world_to_object_matrix(): number[] {
+	get world_to_object_matrix(): Float32Array {
 		var matrix = mat4.create();
 		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale)
 		mat4.invert(matrix, matrix);
