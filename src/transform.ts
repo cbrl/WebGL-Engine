@@ -1,9 +1,9 @@
 import { vec3, quat, mat4 } from "./gl-matrix";
 
 export class Transform {
-	private _translation: [number, number, number] = vec3.create();
-	private _rotation: [number, number, number, number] = quat.create();
-	private _scale: [number, number, number] = vec3.fromValues(1, 1, 1);
+	private _translation: number[] = vec3.create();
+	private _rotation: number[] = quat.create();
+	private _scale: number[] = vec3.fromValues(1, 1, 1);
 
 	translateX(units: number): void {
 		this.translation[0] += units;
@@ -17,17 +17,17 @@ export class Transform {
 		this.translation[2] += units;
 	}
 
-	translate(units: [number, number, number]): void {
+	translate(units: number[]): void {
 		this.translateX(units[0]);
 		this.translateY(units[1]);
 		this.translateZ(units[2]);
 	}
 
-	get translation(): [number, number, number] {
+	get translation(): number[] {
 		return this._translation;
 	}
 
-	set translation(units: [number, number, number]) {
+	set translation(units: number[]) {
 		this._translation = units;
 	}
 
@@ -47,15 +47,15 @@ export class Transform {
 		quat.multiply(this.rotation, quat, this.rotation);
 	}
 
-	get rotation(): [number, number, number, number] {
+	get rotation(): number[] {
 		return this._rotation;
 	}
 
-	set rotation(quat: [number, number, number, number]) {
+	set rotation(quat: number[]) {
 		this._rotation = quat;
 	}
 
-	set euler_angles(degrees: [number, number, number]) {
+	set euler_angles(degrees: number[]) {
 		quat.fromEuler(this.rotation, degrees[0], degrees[1], degrees[2]);
 	}
 
@@ -71,17 +71,17 @@ export class Transform {
 		this._scale[2] *= units;
 	}
 
-	scaleBy(units: [number, number, number]): void {
+	scaleBy(units: number[]): void {
 		this.scaleByX(units[0]);
 		this.scaleByY(units[1]);
 		this.scaleByZ(units[2]);
 	}
 
-	set scale(units: [number, number, number]) {
+	set scale(units: number[]) {
 		this._scale = units;
 	}
 
-	get scale(): [number, number, number] {
+	get scale(): number[] {
 		return this._scale;
 	}
 
