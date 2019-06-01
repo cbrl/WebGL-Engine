@@ -7,35 +7,33 @@ function uuidv4() {
 
 class Entity {
 	handle: string = uuidv4();
-	components: Map<string, Component> = new Map();
+	private _components: Map<string, Component> = new Map();
 
 	constructor() {}
 
-	addComponent<T extends Component>(c: new(...args: any[]) => T, ...args: any[]): T {
-		var component: T = new c(...args);
+	addComponent<T extends Component>(component: T): T {
 		component.owner = this.handle;
-
-		this.components.set(component.constructor.name, component);
+		this._components.set(component.constructor.name, component);
 		return component;
 	}
 
 	hasComponent<T extends typeof Component>(type: T): boolean {
-		return this.components.has(type.name);
+		return this._components.has(type.name);
 	}
 
 	getComponent<T extends Component>(type: new(...args: any[]) => T): T | null {
-		return <T>this.components.get(type.name);
+		return <T>this._components.get(type.name);
 	}
 
 	removeComponent<T extends Component>(component: T): boolean {
-		return this.components.delete(component.constructor.name);
+		return this._components.delete(component.constructor.name);
 	}
 }
 
 
 abstract class Component {
 	owner: string;
-	constructor() {}
+	constructor(...args: any[]) {}
 }
 
 
@@ -53,24 +51,24 @@ abstract class System {
 
 
 class ECS {
-	entities: Map<string, Entity> = new Map();
-	systems: Map<string, System> = new Map();
+	private _entities: Map<string, Entity> = new Map();
+	private _systems: Map<string, System> = new Map();
 
 	constructor() {
 	}
 
 	createEntity(): Entity {
 		var entity = new Entity();
-		this.entities.set(entity.handle, entity);
+		this._entities.set(entity.handle, entity);
 		return entity;
 	}
 
 	getEntity(handle: string): Entity | null {
-		return this.entities.get(handle);
+		return this._entities.get(handle);
 	}
 
 	removeEntityWithHandle(handle: string): boolean {
-		return this.entities.delete(handle);
+		return this._entities.delete(handle);
 	}
 
 	removeEntity(entity: Entity): boolean {
@@ -81,21 +79,21 @@ class ECS {
 	addSystem<T extends System>(type: new(...args: any[]) => T, ...args: any[]): T {
 		var system: T = new type(...args);
 		system.setECS(this);
-		this.systems.set(system.constructor.name, system);
+		this._systems.set(system.constructor.name, system);
 		return system;
 	}
 
 	removeSystemOfType<T extends typeof System>(type: T): boolean {
-		return this.systems.delete(type.name);
+		return this._systems.delete(type.name);
 	}
 
 	removeSystem<T extends System>(system: T): boolean {
-		return this.systems.delete(system.constructor.name);
+		return this._systems.delete(system.constructor.name);
 	}
 
 
 	update(): void {
-		this.systems.forEach((system: System) => {
+		this._systems.forEach((system: System) => {
 			system.update();
 		});
 	}
@@ -103,7 +101,7 @@ class ECS {
 
 	// Parameters: [component_type_1, component_type_2, ...], function(Entity) => void
 	forEach<T extends typeof Component>(component_types: T[], func: (e: Entity) => void): void {
-		this.entities.forEach((entity: Entity) => {
+		this._entities.forEach((entity: Entity) => {
 			var valid: boolean = true;
 			component_types.forEach((type: T) => {
 				if (!entity.hasComponent(type))

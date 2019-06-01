@@ -3,7 +3,7 @@ import { Renderer } from "./renderer";
 
 
 class WebGL {
-	_context: WebGLRenderingContext;
+	private _context: WebGLRenderingContext;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this._context = canvas.getContext("webgl");
@@ -24,8 +24,8 @@ class WebGL {
 
 
 export class RenderingMgr {
-	_web_gl: WebGL;
-	_renderer: Renderer;
+	private _web_gl: WebGL;
+	private _renderer: Renderer;
 
 	constructor(canvas: HTMLCanvasElement) {
 		this._web_gl = new WebGL(canvas);

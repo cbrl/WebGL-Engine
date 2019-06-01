@@ -4,10 +4,10 @@ import { Scene, TestScene } from "./scene";
 export class Engine {
 	private static _instance: Engine = new Engine();
 
-	_running: boolean;
-	_canvas: HTMLCanvasElement;
-	_rendering_mgr: RenderingMgr;
-	_scene: Scene;
+	private _running: boolean;
+	private _canvas: HTMLCanvasElement;
+	private _rendering_mgr: RenderingMgr;
+	private _scene: Scene;
 
 	constructor() {
 		this._canvas = <HTMLCanvasElement>document.getElementById("gl_canvas");

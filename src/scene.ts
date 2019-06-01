@@ -1,14 +1,13 @@
 import { Engine } from "./engine";
 import { ECS, Entity, Component, System } from "./ecs";
-import { Shape } from "./shape";
-import { Camera, PerspectiveCamera, OrthographicCamera } from "./camera";
+import { Transform } from "./transform";
+import { PerspectiveCamera, OrthographicCamera } from "./camera";
 import { VertexPositionColor } from "./vertex";
+import { Model } from "./model";
 import { vec3 } from "./gl-matrix";
 
 export abstract class Scene {
 	ecs: ECS = new ECS();
-	shapes: Shape[] = [];
-	camera: Camera;
 
 	constructor() {}
 
@@ -31,11 +30,12 @@ export class TestScene extends Scene {
 
 	load(): void {
 		var context: WebGLRenderingContext = Engine.rendering_mgr.context;
-		
-		this.camera = new PerspectiveCamera();
-		this.camera.transform.translation = vec3.fromValues(0, 0, 3);
 
-		var vertices = [
+		var cam: Entity = this.ecs.createEntity();
+		cam.addComponent(new Transform()).translation = vec3.fromValues(0, 0, 3);
+		cam.addComponent(new PerspectiveCamera());
+
+		const vertices: VertexPositionColor[] = [
 			new VertexPositionColor([ 0,    1,   0], [1, 0, 0]),
 			new VertexPositionColor([-0.5,  0,   0], [0, 1, 0]),
 			new VertexPositionColor([ 0.5 , 0,   0], [0, 0, 1]),
@@ -44,7 +44,9 @@ export class TestScene extends Scene {
 			new VertexPositionColor([-0.5,  0,   0], [1, 0, 1]),
 		];
 
-		this.shapes.push(new Shape(context, vertices));
+		var tris = this.ecs.createEntity();
+		tris.addComponent(new Transform());
+		tris.addComponent(new Model(context, vertices));
 	}
 
 	unload(): void {
