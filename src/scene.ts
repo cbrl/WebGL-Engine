@@ -18,7 +18,12 @@ export abstract class Scene {
 	abstract unload(): void;
 
 	// Called every tick
-	abstract update(): void;
+	update(): void {
+		this.ecs.update();
+		this.updateScene();
+	}
+
+	abstract updateScene(): void;
 }
 
 
@@ -53,7 +58,7 @@ export class TestScene extends Scene {
 		
 	}
 
-	update(): void {
-
+	updateScene(): void {
+		
 	}
 }
