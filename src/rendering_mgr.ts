@@ -15,6 +15,7 @@ class WebGL {
 
 		this._context.enable(WebGLRenderingContext.CULL_FACE);
 		this._context.enable(WebGLRenderingContext.SCISSOR_TEST);
+		this._context.enable(WebGLRenderingContext.DEPTH_TEST);
 	}
 
 	get context(): WebGLRenderingContext {
