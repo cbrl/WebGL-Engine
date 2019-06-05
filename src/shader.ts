@@ -60,6 +60,7 @@ class Program {
 		if (!link_success) {
 			console.error("Program link error: ", context.getProgramInfoLog(program));
 			context.deleteProgram(program);
+			return;
 		}
 
 		context.validateProgram(program);
@@ -67,6 +68,7 @@ class Program {
 		if (!validate_success) {
 			console.error("Program validation error: ", context.getProgramInfoLog(program));
 			context.deleteProgram(program);
+			return;
 		}
 
 		this._program = program;
