@@ -4,10 +4,13 @@ import { Scene, TestScene } from "./scene";
 export class Engine {
 	private static _instance: Engine = new Engine();
 
-	private _running: boolean;
+	private _running: boolean = false;
 	private _canvas: HTMLCanvasElement;
 	private _rendering_mgr: RenderingMgr;
 	private _scene: Scene;
+
+	private _prev_time: DOMHighResTimeStamp;
+	private _delta_time_ms: number = 0;
 
 	constructor() {
 		this._canvas = <HTMLCanvasElement>document.getElementById("gl_canvas");
@@ -27,7 +30,11 @@ export class Engine {
 	//--------------------------------------------------------------------------------
 
 	static get canvas(): HTMLCanvasElement {
-		return Engine._instance._canvas;
+		return Engine._instance.canvas;
+	}
+
+	static get delta_time(): number {
+		return Engine._instance.delta_time;
 	}
 	
 	static get rendering_mgr(): RenderingMgr {
@@ -54,6 +61,14 @@ export class Engine {
 	// Member methods
 	//--------------------------------------------------------------------------------
 
+	private get canvas(): HTMLCanvasElement {
+		return this._canvas;
+	}
+
+	private get delta_time(): number {
+		return this._delta_time_ms;
+	}
+
 	private get rendering_mgr(): RenderingMgr {
 		return this._rendering_mgr;
 	}
@@ -72,6 +87,7 @@ export class Engine {
 
 	private run(): void {
 		Engine._instance._running = true;
+		this.reset_timer();
 		window.requestAnimationFrame(Engine._instance.update.bind(Engine._instance));
 	}
 
@@ -80,6 +96,8 @@ export class Engine {
 	}
 
 	private update(): void {
+		this.update_timer();
+
 		if (this._scene)
 			this._scene.update();
 
@@ -87,6 +105,16 @@ export class Engine {
 
 		if (this._running)
 			window.requestAnimationFrame(this.update.bind(this));
+	}
+
+	private reset_timer(): void {
+		this._prev_time = performance.now();
+	}
+
+	private update_timer(): void {
+		const curr_time: DOMHighResTimeStamp = performance.now();
+		this._delta_time_ms = curr_time - this._prev_time;
+		this._prev_time = curr_time;
 	}
 
 	private render(): void {

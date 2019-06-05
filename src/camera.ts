@@ -55,10 +55,6 @@ class OrthographicCamera extends Component implements Camera {
 	}
 
 	set ortho_size(value: [number, number]) {
-		if (value.length != 2) {
-			console.log("OrthographicCamera.ortho_size() value should have length of 2, but length is", value.length);
-			return;
-		}
 		this._ortho_size = value;
 	}
 	
