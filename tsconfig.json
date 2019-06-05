@@ -3,7 +3,7 @@
 		"module": "commonjs",
 		"target": "es2018",
 		"jsx": "preserve",
-		"noImplicitAny": false,
+		"noImplicitAny": true,
 		"removeComments": false,
 		"sourceMap": false,
 		"outDir": "./tsc_build"

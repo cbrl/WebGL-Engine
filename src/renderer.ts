@@ -5,6 +5,7 @@ import { Transform } from "./transform";
 import { OrthographicCamera, PerspectiveCamera } from "./camera";
 import { Model } from "./model";
 import { ECS, Entity, Component } from "./ecs";
+import { mat4 } from "gl-matrix";
 
 const g_vertex_shader_source = String.raw`
 attribute vec3 a_position;
@@ -58,8 +59,8 @@ export class Renderer {
 	}
 
 	renderCamera(scene: Scene, cam: PerspectiveCamera | OrthographicCamera, transform: Transform): void {
-		const world_to_camera: Float32Array = transform.world_to_object_matrix;
-		const camera_to_projection: Float32Array = cam.camera_to_projection_matrix;
+		const world_to_camera: mat4 = transform.world_to_object_matrix;
+		const camera_to_projection: mat4 = cam.camera_to_projection_matrix;
 
 		// Must bind program before binding attributes
 		this._program.bindProgram(this._context);
@@ -71,7 +72,7 @@ export class Renderer {
 			model.bindVertexBuffer(this._context); //Bind the shape's vertex buffer
 			this._program.bindVertexDescs(this._context); //After binding the vertex buffer, bind the vertex attributes
 			
-			const object_to_world: Float32Array = model_transform.object_to_world_matrix;
+			const object_to_world: mat4 = model_transform.object_to_world_matrix;
 
 			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_world");
 			const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_view");

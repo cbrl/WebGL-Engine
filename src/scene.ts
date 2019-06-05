@@ -4,7 +4,7 @@ import { Transform } from "./transform";
 import { PerspectiveCamera, OrthographicCamera } from "./camera";
 import { VertexPositionColor } from "./vertex";
 import { Model } from "./model";
-import { vec3 } from "./gl-matrix";
+import { vec3 } from "gl-matrix";
 
 export abstract class Scene {
 	ecs: ECS = new ECS();
