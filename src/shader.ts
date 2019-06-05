@@ -1,7 +1,7 @@
 import { VertexDesc } from "./vertex";
 
-class Shader {
-	_shader: WebGLShader;
+abstract class Shader {
+	private _shader: WebGLShader;
 
 	constructor(context: WebGLRenderingContext, type: number, source: string) {
 		var shader: WebGLShader = context.createShader(type);
@@ -17,7 +17,7 @@ class Shader {
 		}
 	}
 
-	getShader(): WebGLShader {
+	get gl_shader(): WebGLShader {
 		return this._shader;
 	}
 }
@@ -52,8 +52,8 @@ class Program {
 
 	createProgram(context: WebGLRenderingContext): void {
 		var program: WebGLProgram = context.createProgram();
-		context.attachShader(program, this._vertex_shader.getShader());
-		context.attachShader(program, this._fragment_shader.getShader());
+		context.attachShader(program, this._vertex_shader.gl_shader);
+		context.attachShader(program, this._fragment_shader.gl_shader);
 		
 		context.linkProgram(program);
 		const link_success = context.getProgramParameter(program, WebGLRenderingContext.LINK_STATUS);
@@ -74,7 +74,7 @@ class Program {
 		this._program = program;
 	}
 
-	getProgram(): WebGLProgram {
+	get gl_program(): WebGLProgram {
 		return this._program;
 	}
 

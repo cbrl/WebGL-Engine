@@ -74,9 +74,9 @@ export class Renderer {
 			
 			const object_to_world: mat4 = model_transform.object_to_world_matrix;
 
-			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_world");
-			const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_view");
-			const proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.getProgram(), "u_proj");
+			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_world");
+			const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_view");
+			const proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_proj");
 
 			this._context.uniformMatrix4fv(world_loc, false, object_to_world);
 			this._context.uniformMatrix4fv(view_loc, false, world_to_camera);
