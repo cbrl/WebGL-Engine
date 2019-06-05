@@ -1,0 +1,7 @@
+typescript
+gl-matrix
+@types/gl-matrix
+gulp
+browserify
+tsify
+vinyl-source-stream
