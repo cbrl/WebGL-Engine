@@ -1,8 +1,11 @@
 var gulp = require("gulp");
-var tsConfig = require("./tsconfig.json");
-var source = require('vinyl-source-stream');
 var browserify = require("browserify");
 var tsify = require("tsify");
+var beautify = require("gulp-beautify");
+var source = require('vinyl-source-stream');
+var buffer = require("vinyl-buffer");
+var tsConfig = require("./tsconfig.json");
+
 var paths = {
     pages: ['src/*.html']
 };
@@ -22,6 +25,10 @@ gulp.task("default", gulp.series(gulp.parallel('copy-html'), function () {
     })
     .plugin(tsify, tsConfig)
     .bundle()
-    .pipe(source('bundle.js'))
+	.pipe(source('bundle.js'))
+	.pipe(buffer())
+	.pipe(beautify({
+		indent_size: 4
+	}))
     .pipe(gulp.dest("dist"));
 }));
