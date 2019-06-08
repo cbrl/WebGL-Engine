@@ -1,5 +1,5 @@
-import { Component } from "./ecs";
-import { Vertex, VertexArrayToFloat32Array } from "./vertex";
+import { Component } from "../ecs";
+import { Vertex, VertexArrayToFloat32Array } from "../rendering/vertex";
 
 export class Model extends Component {
 	primitive_type: number;

@@ -1,5 +1,5 @@
 import { vec3, quat, mat4 } from "gl-matrix";
-import { Component } from "./ecs";
+import { Component } from "../ecs";
 
 class Transform3D {
 	private _translation: vec3 = vec3.create();

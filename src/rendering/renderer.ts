@@ -1,10 +1,10 @@
 import { VertexPositionColor } from "./vertex";
 import { VertexShader, FragmentShader, Program } from "./shader";
 import { Scene } from "./scene";
-import { Transform } from "./transform";
-import { OrthographicCamera, PerspectiveCamera } from "./camera";
-import { Model } from "./model";
-import { ECS, Entity, Component } from "./ecs";
+import { Transform } from "../components/transform";
+import { OrthographicCamera, PerspectiveCamera } from "../components/camera";
+import { Model } from "../components/model";
+import { ECS, Entity, Component } from "../ecs";
 import { mat4 } from "gl-matrix";
 
 const g_vertex_shader_source = String.raw`

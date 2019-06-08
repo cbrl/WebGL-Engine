@@ -1,5 +1,5 @@
-import { Viewport } from "./viewport";
-import { Component } from "./ecs";
+import { Viewport } from "../rendering/viewport";
+import { Component } from "../ecs";
 import { mat4 } from "gl-matrix";
 
 interface Camera {
