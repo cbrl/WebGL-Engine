@@ -6,15 +6,23 @@ class Transform3D {
 	private _rotation: quat = quat.create();
 	private _scale: vec3 = vec3.fromValues(1, 1, 1);
 
+	private _object_to_world: mat4 = mat4.create();
+	private _world_to_object: mat4 = mat4.create();
+
+	private _dirty: boolean = false;
+
 	translateX(units: number): void {
+		this.setDirty();
 		this._translation[0] += units;
 	}
 	
 	translateY(units: number): void {
+		this.setDirty();
 		this._translation[1] += units;
 	}
 
 	translateZ(units: number): void {
+		this.setDirty();
 		this._translation[2] += units;
 	}
 
@@ -29,22 +37,27 @@ class Transform3D {
 	}
 
 	set translation(units: vec3) {
+		this.setDirty();
 		this._translation = units;
 	}
 
 	rotateX(rad: number): void {
+		this.setDirty();
 		quat.rotateX(this._rotation, this._rotation, rad);
 	}
 
 	rotateY(rad: number): void {
+		this.setDirty();
 		quat.rotateY(this._rotation, this._rotation, rad);
 	}
 
 	rotateZ(rad: number): void {
+		this.setDirty();
 		quat.rotateZ(this._rotation, this._rotation, rad);
 	}
 
 	rotate(rotation_quat: quat): void {
+		this.setDirty();
 		quat.multiply(this._rotation, this._rotation, rotation_quat);
 	}
 
@@ -53,22 +66,27 @@ class Transform3D {
 	}
 
 	set rotation(rotation_quat: quat) {
+		this.setDirty();
 		this._rotation = rotation_quat;
 	}
 
 	set euler_angles(degrees: vec3) {
+		this.setDirty();
 		quat.fromEuler(this.rotation, degrees[0], degrees[1], degrees[2]);
 	}
 
 	scaleByX(units: number): void {
+		this.setDirty();
 		this._scale[0] *= units;
 	}
 
 	scaleByY(units: number): void {
+		this.setDirty();
 		this._scale[1] *= units;
 	}
 
 	scaleByZ(units: number): void {
+		this.setDirty();
 		this._scale[2] *= units;
 	}
 
@@ -78,25 +96,55 @@ class Transform3D {
 		this.scaleByZ(units[2]);
 	}
 
-	set scale(units: vec3) {
-		this._scale = units;
-	}
-
 	get scale(): vec3 {
 		return this._scale;
 	}
+	
+	set scale(units: vec3) {
+		this.setDirty();
+		this._scale = units;
+	}
+
+	get world_axis_x(): vec3 {
+		this.updateMatrix();
+		return vec3.fromValues(this._object_to_world[0], this._object_to_world[1], this._object_to_world[2]);
+	}
+
+	get world_axis_y(): vec3 {
+		this.updateMatrix();
+		return vec3.fromValues(this._object_to_world[4], this._object_to_world[5], this._object_to_world[6]);
+	}
+
+	get world_axis_z(): vec3 {
+		this.updateMatrix();
+		return vec3.fromValues(this._object_to_world[8], this._object_to_world[9], this._object_to_world[10]);
+	}
+
+	get world_origin(): vec3 {
+		this.updateMatrix();
+		return vec3.fromValues(this._object_to_world[12], this._object_to_world[13], this._object_to_world[14]);
+	}
 
 	get object_to_world_matrix(): mat4 {
-		var matrix = mat4.create();
-		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale);
-		return matrix;
+		this.updateMatrix();
+		return this._object_to_world;
 	}
 
 	get world_to_object_matrix(): mat4 {
-		var matrix = mat4.create();
-		mat4.fromRotationTranslationScale(matrix, this._rotation, this._translation, this._scale)
-		mat4.invert(matrix, matrix);
-		return matrix;
+		this.updateMatrix();
+		return this._world_to_object;
+	}
+
+	private setDirty(): void {
+		this._dirty = true;
+	}
+
+	private updateMatrix(): void {
+		if (this._dirty) {
+			mat4.fromRotationTranslationScale(this._object_to_world, this._rotation, this._translation, this._scale);
+			mat4.invert(this._world_to_object, this._object_to_world);
+			this._dirty = false;
+		}
 	}
 }
 
@@ -177,12 +225,28 @@ export class Transform extends Component {
 		this._transform.scaleBy(units);
 	}
 
+	get scale(): vec3 {
+		return this._transform.scale;
+	}
+
 	set scale(units: vec3) {
 		this._transform.scale = units;
 	}
 
-	get scale(): vec3 {
-		return this._transform.scale;
+	get world_axis_x(): vec3 {
+		return this._transform.world_axis_x;
+	}
+
+	get world_axis_y(): vec3 {
+		return this._transform.world_axis_y;
+	}
+
+	get world_axis_z(): vec3 {
+		return this._transform.world_axis_z;
+	}
+
+	get world_origin(): vec3 {
+		return this._transform.world_origin;
 	}
 
 	get object_to_world_matrix(): mat4 {
