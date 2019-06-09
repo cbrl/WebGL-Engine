@@ -15,6 +15,8 @@ export class Engine {
 
 	constructor() {
 		this._canvas = <HTMLCanvasElement>document.getElementById("gl_canvas");
+		this._canvas.setAttribute("tabindex", "1"); //set tabindex so canvas can be focused
+
 		this._rendering_mgr = new RenderingMgr(this._canvas);
 		
 		var button: HTMLElement = document.createElement("button");
@@ -88,6 +90,7 @@ export class Engine {
 
 	private run(): void {
 		Engine._instance._running = true;
+		this._canvas.focus();
 		this.reset_timer();
 		window.requestAnimationFrame(Engine._instance.update.bind(Engine._instance));
 	}
