@@ -6,25 +6,48 @@ export class Engine {
 	private static _instance: Engine = new Engine();
 
 	private _running: boolean = false;
-	private _canvas: HTMLCanvasElement;
-	private _rendering_mgr: RenderingMgr;
-	private _scene: Scene;
-
 	private _prev_time: DOMHighResTimeStamp;
 	private _delta_time_ms: number = 0;
 
-	constructor() {
-		this._canvas = <HTMLCanvasElement>document.getElementById("gl_canvas");
-		this._canvas.setAttribute("tabindex", "1"); //set tabindex so canvas can be focused
+	private _canvas: HTMLCanvasElement;
+	private _rendering_mgr: RenderingMgr;
+	private _input: Map<string, boolean> = new Map();
 
-		this._rendering_mgr = new RenderingMgr(this._canvas);
-		
+	private _scene: Scene;
+
+	constructor() {
+		var button_section: HTMLElement = document.createElement("section");
+		document.body.appendChild(button_section);
+		button_section.setAttribute("padding-bottom", "8px");
+
+		var canvas_section: HTMLElement = document.createElement("section");
+		document.body.appendChild(canvas_section);
+
+		// Create and append the "Load Scene" button
 		var button: HTMLElement = document.createElement("button");
-		document.body.appendChild(button);
+		button_section.appendChild(button);
 		button.textContent = "Load Scene";
 		button.addEventListener("click", () => {
 			Engine.scene = new TestScene();
 			Engine.run();
+		});
+
+		// Create and append the canvas
+		this._canvas = <HTMLCanvasElement>document.createElement("canvas");
+		canvas_section.appendChild(this._canvas);
+		this._canvas.setAttribute("width", "640");
+		this._canvas.setAttribute("height", "480");
+		this._canvas.setAttribute("tabindex", "1"); //set tabindex so canvas can be focused
+
+		// Create rendering manager
+		this._rendering_mgr = new RenderingMgr(this._canvas);
+
+		// Add input event listeners
+		this.canvas.addEventListener('keydown', (event) => {
+			this._input.set(event.key, true);
+		});
+		this.canvas.addEventListener('keyup', (event) => {
+			this._input.set(event.key, false);
 		});
 	}
 
@@ -38,6 +61,10 @@ export class Engine {
 
 	static get delta_time(): number {
 		return Engine._instance.delta_time;
+	}
+
+	static get input(): Map<string, boolean> {
+		return Engine._instance.input;
 	}
 	
 	static get rendering_mgr(): RenderingMgr {
@@ -70,6 +97,10 @@ export class Engine {
 
 	private get delta_time(): number {
 		return this._delta_time_ms;
+	}
+
+	private get input(): Map<string, boolean> {
+		return this._input;
 	}
 
 	private get rendering_mgr(): RenderingMgr {
