@@ -25,6 +25,7 @@ class VertexDesc {
 interface Vertex {
 	[key: string]: any;
 	vertex_descs: VertexDesc[];
+	position: [number, number, number];
 }
 
 class VertexPosition implements Vertex {
