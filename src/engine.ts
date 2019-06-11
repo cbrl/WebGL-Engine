@@ -18,7 +18,7 @@ export class Engine {
 	constructor() {
 		var button_section: HTMLElement = document.createElement("section");
 		document.body.appendChild(button_section);
-		button_section.setAttribute("padding-bottom", "8px");
+		button_section.setAttribute("style", "padding-bottom: 8px");
 
 		var canvas_section: HTMLElement = document.createElement("section");
 		document.body.appendChild(canvas_section);
