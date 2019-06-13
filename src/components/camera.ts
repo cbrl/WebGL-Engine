@@ -2,21 +2,18 @@ import { Viewport } from "../rendering/viewport";
 import { Component } from "../ecs";
 import { mat4 } from "gl-matrix";
 
-interface Camera {
+interface ICamera {
 	camera_to_projection_matrix: mat4;
+	viewport: Viewport;
+	bindViewport(context: WebGLRenderingContext): void;
 }
 
-class OrthographicCamera extends Component implements Camera {
+export abstract class Camera extends Component implements ICamera {
 	viewport: Viewport = new Viewport();
-	
-	private _ortho_size: [number, number];
-	private _z_near: number = 0.1;
-	private _z_far: number = 100;
+	protected _z_near: number = 0.1;
+	protected _z_far: number = 100;
 
-	constructor(ortho_size: [number, number] = [512, 288]) {
-		super();
-		this.ortho_size = ortho_size
-	}
+	abstract get camera_to_projection_matrix(): mat4;
 
 	get z_near(): number {
 		return this._z_near;
@@ -48,6 +45,19 @@ class OrthographicCamera extends Component implements Camera {
 			return;
 		}
 		this._z_far = value;
+	}
+
+	bindViewport(context: WebGLRenderingContext): void {
+		this.viewport.bind(context);
+	}
+}
+
+export class OrthographicCamera extends Camera {
+	private _ortho_size: [number, number];
+
+	constructor(ortho_size: [number, number] = [512, 288]) {
+		super();
+		this.ortho_size = ortho_size
 	}
 
 	get ortho_size(): [number, number] {
@@ -65,48 +75,12 @@ class OrthographicCamera extends Component implements Camera {
 	}
 }
 
-class PerspectiveCamera extends Component implements Camera {
-	viewport: Viewport = new Viewport();
+export class PerspectiveCamera extends Camera {
 	fov_y: number;
-
-	private _z_near: number = 0.1;
-	private _z_far: number = 100;
 
 	constructor(fov_y: number = Math.PI/4) {
 		super();
 		this.fov_y = fov_y;
-	}
-
-	get z_near(): number {
-		return this._z_near;
-	}
-
-	set z_near(value: number) {
-		if (value < 0.01) {
-			console.error("Camera z_near should be >= 0.01. Provided value was", value);
-			return;
-		}
-		if (value >= this._z_far) {
-			console.error("Camera z_near should be < z_far. Provided value was", value, " and z_far is", this._z_far);
-			return;
-		}
-		this._z_near = value;
-	}
-
-	get z_far(): number {
-		return this._z_far;
-	}
-
-	set z_far(value: number) {
-		if (value <= 0.01) {
-			console.error("Camera z_far should be > 0.01. Provided value was", value);
-			return;
-		}
-		if (value <= this.z_far) {
-			console.error("Camera z_far should be > z_near. Provided value was", value, " and z_near is", this._z_near);
-			return;
-		}
-		this._z_far = value;
 	}
 	
 	get camera_to_projection_matrix(): mat4 {
@@ -115,8 +89,3 @@ class PerspectiveCamera extends Component implements Camera {
 		return matrix;
 	}
 }
-
-export {
-	OrthographicCamera,
-	PerspectiveCamera,
-};
