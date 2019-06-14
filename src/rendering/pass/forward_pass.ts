@@ -31,10 +31,7 @@ export class ForwardPass {
 			var model_transform: Transform = entity.getComponent(Transform);
 
 			//Bind the shape's vertex buffer
-			model.bindVertexBuffer(this._context); 
-
-			//After binding the vertex buffer, bind the vertex attributes
-			this._program.bindVertexDescs(this._context);
+			model.bindBuffer(this._context); 
 
 			// Update the model uniform buffer
 			this.uploadModelData(model_transform);

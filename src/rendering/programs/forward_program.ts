@@ -7,7 +7,7 @@ import { forward_fs } from "../shaders/forward_fs";
 
 export class ForwardProgram extends Program {
 	constructor(context: WebGL2RenderingContext) {
-		super(context, new VertexShader(context, forward_vs), new FragmentShader(context, forward_fs), VertexPositionNormalColor.vertex_descs);
+		super(context, new VertexShader(context, forward_vs), new FragmentShader(context, forward_fs));
 		this.addUniform(context, "Camera", CameraBuffer.size, ShaderBindings.SLOT_UBO_CAMERA);
 		this.addUniform(context, "Model", ModelBuffer.size, ShaderBindings.SLOT_UBO_MODEL);
 	}

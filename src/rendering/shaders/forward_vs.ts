@@ -1,8 +1,8 @@
 export const forward_vs = String.raw`#version 300 es
 
-layout(location = 0) in vec3 in_position;
-layout(location = 1) in vec3 in_normal;
-layout(location = 2) in vec3 in_color;
+in vec3 in_position;
+in vec3 in_normal;
+in vec3 in_color;
 
 out vec3 world_position;
 out vec3 normal;

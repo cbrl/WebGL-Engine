@@ -1,4 +1,3 @@
-import { VertexDesc } from "./vertex";
 import { UniformBuffer } from "./uniform_buffer";
 
 abstract class Shader {
@@ -39,14 +38,12 @@ export class FragmentShader extends Shader {
 
 
 export class Program {
-	private _vertex_descs: VertexDesc[] = [];
 	private _vertex_shader: VertexShader;
 	private _fragment_shader: FragmentShader;
 	private _program: WebGLProgram;
 	private _buffers: Map<string, UniformBuffer> = new Map();
 
-	constructor(context: WebGL2RenderingContext, vertex_shader: VertexShader, fragment_shader: FragmentShader, vertex_descs: VertexDesc[]) {
-		this._vertex_descs = vertex_descs;
+	constructor(context: WebGL2RenderingContext, vertex_shader: VertexShader, fragment_shader: FragmentShader) {
 		this._vertex_shader = vertex_shader;
 		this._fragment_shader = fragment_shader;
 		this.createProgram(context);
@@ -88,12 +85,6 @@ export class Program {
 
 	bindProgram(context: WebGL2RenderingContext): void {
 		context.useProgram(this._program);
-	}
-	
-	bindVertexDescs(context: WebGL2RenderingContext): void {
-		for (const desc of this._vertex_descs) {
-			desc.bind(context, this._program);
-		}
 	}
 
 	addUniform(context: WebGL2RenderingContext, name: string, size: number, slot: number): void {

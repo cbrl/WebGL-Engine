@@ -8,6 +8,7 @@ export class UniformBuffer {
 		if (this._buffer) {
 			context.bindBuffer(WebGL2RenderingContext.UNIFORM_BUFFER, this._buffer);
 			context.bufferData(WebGL2RenderingContext.UNIFORM_BUFFER, size, WebGL2RenderingContext.STATIC_DRAW);
+			context.bindBuffer(WebGL2RenderingContext.UNIFORM_BUFFER, null);
 			this.bindBase(context, slot);
 		}
 		else {
@@ -31,6 +32,7 @@ export class UniformBuffer {
 		}
 		context.bindBuffer(WebGL2RenderingContext.UNIFORM_BUFFER, this._buffer);
 		context.bufferSubData(WebGL2RenderingContext.UNIFORM_BUFFER, 0, data, 0);
+		context.bindBuffer(WebGL2RenderingContext.UNIFORM_BUFFER, null);
 	}
 
 	bindBase(context: WebGL2RenderingContext, slot: number): void {
