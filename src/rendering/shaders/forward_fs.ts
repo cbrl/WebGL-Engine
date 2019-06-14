@@ -27,21 +27,29 @@ struct PointLight {
 struct SpotLight {
 	vec3  intensity;
 	float pad0;
+	
 	vec3  position;
 	float range;
+
 	vec3  direction;
 	float cos_umbra;
-	float cos_penumbra;
+
 	vec3  attenuation;
+	float cos_penumbra;
 };
 
-/*
+
 layout(std140) uniform Lights {
-	DirectionalLight g_directional_lights[4];
-	PointLight       g_point_lights[4];
-	SpotLight        g_spot_lights[4];
+	DirectionalLight g_directional_lights[8];
+	PointLight       g_point_lights[8];
+	SpotLight        g_spot_lights[8];
+	
+	float            n_directional_lights;
+	float            n_point_lights;
+	float            n_spot_lights;
+	float            lb_pad0;
 };
-*/
+
 
 
 //----------------------------------------------------------------------------------

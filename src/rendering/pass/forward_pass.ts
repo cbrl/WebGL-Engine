@@ -1,4 +1,5 @@
 import { ForwardProgram } from "../programs/forward_program";
+import { LightPass } from "./light_pass";
 
 import { Scene } from "../scene";
 
@@ -13,10 +14,12 @@ import { ModelBuffer, CameraBuffer } from "../buffer/buffers";
 export class ForwardPass {
 	private _context: WebGL2RenderingContext;
 	private _program: ForwardProgram;
+	private _light_pass: LightPass;
 
 	constructor(context: WebGL2RenderingContext) {
 		this._context = context;
 		this._program = new ForwardProgram(this._context);
+		this._light_pass = new LightPass(this._context);
 	}
 
 	render(scene: Scene, camera: Camera, camera_transform: Transform): void {
@@ -25,6 +28,9 @@ export class ForwardPass {
 		
 		// Update camera uniform buffer
 		this.uploadCameraData(camera, camera_transform);
+
+		// Update light buffers
+		this._light_pass.updateLightBuffer(scene, this._program);
 
 		scene.ecs.forEach([Model, Transform], (entity: Entity) => {
 			var model: Model = entity.getComponent(Model);

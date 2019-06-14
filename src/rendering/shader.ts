@@ -94,7 +94,7 @@ export class Program {
 			context.uniformBlockBinding(this._program, index, slot);
 		}
 		else {
-			console.warn("Attempting to add uniform \"", name, "\", but one already exits with that name.");
+			console.warn("Attempting to add uniform \"" + name + "\", but one already exits with that name.");
 		}
 	}
 
@@ -104,7 +104,7 @@ export class Program {
 			buffer.updateData(context, data);
 		}
 		else {
-			console.warn("Attempting to update data of uniform \"", name, "\", but it has not yet been added with Program.addUniform().");
+			console.warn("Attempting to update data of uniform \"" + name + "\", but it has not yet been added with Program.addUniform().");
 		}
 	}
 }
