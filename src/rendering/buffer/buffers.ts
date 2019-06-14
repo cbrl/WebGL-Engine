@@ -1,9 +1,9 @@
 import { mat4 } from "gl-matrix";
 
-export enum ShaderBindings {
-	SLOT_UBO_CAMERA = 0,
-	SLOT_UBO_MODEL  = 1,
-	SLOT_UBO_LIGHT  = 2,
+export enum UniformBufferLocations {
+	CAMERA = 0,
+	MODEL  = 1,
+	LIGHT  = 2,
 }
 
 export interface Buffer {

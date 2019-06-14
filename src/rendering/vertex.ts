@@ -1,6 +1,6 @@
 import { vec2, vec3, vec4 } from "gl-matrix";
 
-export enum VertexLocation {
+export enum VertexLocations {
 	POSITION = 0,
 	NORMAL   = 1,
 	COLOR    = 2,
