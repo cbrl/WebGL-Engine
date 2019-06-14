@@ -11,7 +11,7 @@ export class UniformBuffer {
 			this.bindBase(context, slot);
 		}
 		else {
-			console.error("Uniform buffer creation failed (size: ", size, "). Error type: ", context.getError());
+			console.error("Uniform buffer creation failed (size: ", size, "). Error code: ", context.getError());
 		}
 	}
 

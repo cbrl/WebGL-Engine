@@ -17,8 +17,9 @@ export class TestScene extends Scene {
 		var context: WebGL2RenderingContext = Engine.rendering_mgr.context;
 
 		var cam: Entity = this.ecs.createEntity();
-		cam.addComponent(new Transform()).translation = vec3.fromValues(0, 0, 3);
-		cam.addComponent(new PerspectiveCamera());
+		var transform: Transform = cam.addComponent(new Transform());
+		var camera: PerspectiveCamera = cam.addComponent(new PerspectiveCamera());
+		transform.translateZ(3);
 
 		const vertices: VertexPositionColor[] = [
 			new VertexPositionColor([ 0,    1,   0], [1, 0, 0]),

@@ -37,7 +37,7 @@ export class ForwardPass {
 			this._program.bindVertexDescs(this._context);
 
 			// Update the model uniform buffer
-			this.uploadModelData(model, model_transform);
+			this.uploadModelData(model_transform);
 
 			// Render the model
 			model.render(this._context);
@@ -51,7 +51,7 @@ export class ForwardPass {
 		this._program.updateUniform(this._context, "Camera", buffer.data);
 	}
 
-	private uploadModelData(model: Model, transform: Transform): void {
+	private uploadModelData(transform: Transform): void {
 		var buffer: ModelBuffer = new ModelBuffer;
 		buffer.world = transform.object_to_world_matrix;
 		buffer.tex_transform = mat4.create();
