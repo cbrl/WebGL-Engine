@@ -1,11 +1,14 @@
 import { Engine } from "./engine";
 import { Scene } from "./rendering/scene";
+import { VertexPositionNormalColor } from "./rendering/vertex";
+import { vec3 } from "gl-matrix";
+import { calculateNormals } from "./math";
+
 import { ECS, Entity, Component, System } from "./ecs";
 import { Transform } from "./components/transform";
 import { PerspectiveCamera, OrthographicCamera } from "./components/camera";
-import { VertexPositionColor } from "./rendering/vertex";
 import { Model } from "./components/model";
-import { vec3 } from "gl-matrix";
+
 
 export class TestScene extends Scene {
 
@@ -21,14 +24,15 @@ export class TestScene extends Scene {
 		var camera: PerspectiveCamera = cam.addComponent(new PerspectiveCamera());
 		transform.translateZ(3);
 
-		const vertices: VertexPositionColor[] = [
-			new VertexPositionColor([ 0,    1,   0], [1, 0, 0]),
-			new VertexPositionColor([-0.5,  0,   0], [0, 1, 0]),
-			new VertexPositionColor([ 0.5 , 0,   0], [0, 0, 1]),
-			new VertexPositionColor([ 0,   -1,   0], [0, 1, 1]),
-			new VertexPositionColor([ 0.5,  0,   0], [1, 1, 0]),
-			new VertexPositionColor([-0.5,  0,   0], [1, 0, 1]),
+		const vertices: VertexPositionNormalColor[] = [
+			new VertexPositionNormalColor([ 0,    1,   0], vec3.create(), [1, 0, 0]),
+			new VertexPositionNormalColor([-0.5,  0,   0], vec3.create(), [0, 1, 0]),
+			new VertexPositionNormalColor([ 0.5 , 0,   0], vec3.create(), [0, 0, 1]),
+			new VertexPositionNormalColor([ 0,   -1,   0], vec3.create(), [0, 1, 1]),
+			new VertexPositionNormalColor([ 0.5,  0,   0], vec3.create(), [1, 1, 0]),
+			new VertexPositionNormalColor([-0.5,  0,   0], vec3.create(), [1, 0, 1]),
 		];
+		calculateNormals(vertices);
 
 		var tris = this.ecs.createEntity();
 		tris.addComponent(new Transform());

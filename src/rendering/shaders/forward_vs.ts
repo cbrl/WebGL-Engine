@@ -86,9 +86,9 @@ PositionNormalTexture Transform(vec3 position,
 
 
 void main() {
-	gl_Position = g_camera_to_projection * g_world_to_camera * g_model_to_world * vec4(in_position, 1.0f);
-	//gl_Position = Transform(in_position, g_model_to_world, g_world_to_camera, g_camera_to_projection);
-	//gl_Normal = in_normal;
+	gl_Position = Transform(in_position, g_model_to_world, g_world_to_camera, g_camera_to_projection);
+	world_position = (g_model_to_world * vec4(in_position, 1.0f)).xyz;
+	normal = in_normal;
 	color = in_color;
 }
 `;

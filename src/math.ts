@@ -20,7 +20,7 @@ export function calculateNormals(vertices: VertexPositionNormalColor[]): void {
 		vec3.copy(vertex.normal, [0, 0, 0]);
 	}
 
-	for (let i = 0; i < (vertices.length - 3); ++i) {
+	for (let i = 0; i <= (vertices.length - 3);) {
 		let v0 = vertices[i];
 		let v1 = vertices[i+1];
 		let v2 = vertices[i+2];
@@ -37,6 +37,8 @@ export function calculateNormals(vertices: VertexPositionNormalColor[]): void {
 		vec3.add(v0.normal, v0.normal, normal);	
 		vec3.add(v1.normal, v1.normal, normal);
 		vec3.add(v2.normal, v2.normal, normal);
+
+		i += 3;
 	}
 
 	for (let vertex of vertices) {
