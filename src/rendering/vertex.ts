@@ -40,7 +40,7 @@ export interface Vertex {
 
 export class VertexPosition implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
-		new VertexDesc("in_position", VertexLocation.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 3*Float32Array.BYTES_PER_ELEMENT, 0),
+		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 3*Float32Array.BYTES_PER_ELEMENT, 0),
 	];
 
 	position: vec3 = vec3.create();
@@ -60,8 +60,8 @@ export class VertexPosition implements Vertex {
 
 export class VertexPositionColor implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
-		new VertexDesc("in_position", VertexLocation.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 6*Float32Array.BYTES_PER_ELEMENT, 0),
-		new VertexDesc("in_color",    VertexLocation.COLOR,    3, WebGL2RenderingContext.FLOAT, false, 6*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
+		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 6*Float32Array.BYTES_PER_ELEMENT, 0),
+		new VertexDesc("in_color",    VertexLocations.COLOR,    3, WebGL2RenderingContext.FLOAT, false, 6*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
 	];
 
 	position: vec3 = vec3.create();
@@ -83,9 +83,9 @@ export class VertexPositionColor implements Vertex {
 
 export class VertexPositionNormalColor implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
-		new VertexDesc("in_position", VertexLocation.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 9*Float32Array.BYTES_PER_ELEMENT, 0),
-		new VertexDesc("in_normal",   VertexLocation.NORMAL,   3, WebGL2RenderingContext.FLOAT, true,  9*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
-		new VertexDesc("in_color",    VertexLocation.COLOR,    3, WebGL2RenderingContext.FLOAT, false, 9*Float32Array.BYTES_PER_ELEMENT, 6*Float32Array.BYTES_PER_ELEMENT),
+		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 9*Float32Array.BYTES_PER_ELEMENT, 0),
+		new VertexDesc("in_normal",   VertexLocations.NORMAL,   3, WebGL2RenderingContext.FLOAT, true,  9*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
+		new VertexDesc("in_color",    VertexLocations.COLOR,    3, WebGL2RenderingContext.FLOAT, false, 9*Float32Array.BYTES_PER_ELEMENT, 6*Float32Array.BYTES_PER_ELEMENT),
 	];
 
 	position: vec3 = vec3.create();
@@ -109,9 +109,9 @@ export class VertexPositionNormalColor implements Vertex {
 
 export class VertexPositionNormalTexture implements Vertex {
 	private static _vertex_descs: VertexDesc[] = [
-		new VertexDesc("in_position", VertexLocation.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 0),
-		new VertexDesc("in_normal",   VertexLocation.NORMAL,   3, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
-		new VertexDesc("in_texcoord", VertexLocation.TEXCOORD, 2, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 6*Float32Array.BYTES_PER_ELEMENT),
+		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 0),
+		new VertexDesc("in_normal",   VertexLocations.NORMAL,   3, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 3*Float32Array.BYTES_PER_ELEMENT),
+		new VertexDesc("in_texcoord", VertexLocations.TEXCOORD, 2, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 6*Float32Array.BYTES_PER_ELEMENT),
 	];
 
 	position: vec3 = vec3.create();
