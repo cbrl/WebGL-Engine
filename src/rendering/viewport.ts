@@ -27,7 +27,7 @@ export class Viewport {
 		return this.width / this.height;
 	}
 
-	bind(context: WebGLRenderingContext): void {
+	bind(context: WebGL2RenderingContext): void {
 		context.viewport(this.top_left[0], this.top_left[1], this.size[0], this.size[1]);
 	}
 }

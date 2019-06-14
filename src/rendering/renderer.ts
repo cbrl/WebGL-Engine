@@ -12,10 +12,10 @@ import { mat4 } from "gl-matrix";
 
 
 export class Renderer {
-	private _context: WebGLRenderingContext;
+	private _context: WebGL2RenderingContext;
 	private _forward_pass: ForwardPass;
 
-	constructor(context: WebGLRenderingContext) {
+	constructor(context: WebGL2RenderingContext) {
 		this._context = context;
 		this._forward_pass = new ForwardPass(context);
 	}
@@ -35,11 +35,11 @@ export class Renderer {
 	}
 
 	renderCamera(scene: Scene, cam: Camera, transform: Transform): void {
-		const world_to_camera: mat4 = transform.world_to_object_matrix;
-		const camera_to_projection: mat4 = cam.camera_to_projection_matrix;
-		var world_to_projection: mat4 = mat4.create();
-		mat4.multiply(world_to_projection, camera_to_projection, world_to_camera);
+		// const world_to_camera: mat4 = transform.world_to_object_matrix;
+		// const camera_to_projection: mat4 = cam.camera_to_projection_matrix;
+		// var world_to_projection: mat4 = mat4.create();
+		// mat4.multiply(world_to_projection, camera_to_projection, world_to_camera);
 
-		this._forward_pass.render(scene, world_to_camera, camera_to_projection);
+		this._forward_pass.render(scene, cam, transform);
 	}
 }

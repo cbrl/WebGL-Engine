@@ -1,57 +1,62 @@
-import { VertexShader, FragmentShader, Program } from "../shader";
-import { forward_vs } from "../../shaders/forward_vs";
-import { forward_fs } from "../../shaders/forward_fs";
+import { ForwardProgram } from "../programs/forward_program";
 
-import { VertexPositionColor } from "../vertex";
 import { Scene } from "../scene";
 
 import { Entity } from "../../ecs";
-import { Model } from "../../components/model";
 import { Transform } from "../../components/transform";
+import { Camera } from "../../components/camera";
+import { Model } from "../../components/model";
 
 import { mat4 } from "gl-matrix";
+import { ModelBuffer, CameraBuffer } from "../buffer/buffers";
  
 export class ForwardPass {
-	private _context: WebGLRenderingContext;
-	private _program: Program;
+	private _context: WebGL2RenderingContext;
+	private _program: ForwardProgram;
 
-	constructor(context: WebGLRenderingContext) {
+	constructor(context: WebGL2RenderingContext) {
 		this._context = context;
-
-		var vertex_shader = new VertexShader(this._context, forward_vs);
-		var fragment_shader = new FragmentShader(this._context, forward_fs);
-
-		this._program = new Program(this._context, vertex_shader, fragment_shader, VertexPositionColor.vertex_descs);
+		this._program = new ForwardProgram(this._context);
 	}
 
-	render(scene: Scene, world_to_camera: mat4, camera_to_projection: mat4): void {
-		
+	render(scene: Scene, camera: Camera, camera_transform: Transform): void {
 		// Must bind program before binding attributes
 		this._program.bindProgram(this._context);
-
-		const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_view");
-		const proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_proj");
-		this._context.uniformMatrix4fv(view_loc, false, world_to_camera);
-		this._context.uniformMatrix4fv(proj_loc, false, camera_to_projection);
+		
+		// Update camera uniform buffer
+		this.uploadCameraData(camera, camera_transform);
 
 		scene.ecs.forEach([Model, Transform], (entity: Entity) => {
 			var model: Model = entity.getComponent(Model);
 			var model_transform: Transform = entity.getComponent(Transform);
 
-			model.bindVertexBuffer(this._context); //Bind the shape's vertex buffer
-			this._program.bindVertexDescs(this._context); //After binding the vertex buffer, bind the vertex attributes
-			
-			const object_to_world: mat4 = model_transform.object_to_world_matrix;
+			//Bind the shape's vertex buffer
+			model.bindVertexBuffer(this._context); 
 
-			const world_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_world");
-			//const view_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_view");
-			//const proj_loc: WebGLUniformLocation = this._context.getUniformLocation(this._program.gl_program, "u_proj");
+			//After binding the vertex buffer, bind the vertex attributes
+			this._program.bindVertexDescs(this._context);
 
-			this._context.uniformMatrix4fv(world_loc, false, object_to_world);
-			//this._context.uniformMatrix4fv(view_loc, false, world_to_camera);
-			//this._context.uniformMatrix4fv(proj_loc, false, camera_to_projection);
+			// Update the model uniform buffer
+			this.uploadModelData(model, model_transform);
 
+			// Render the model
 			model.render(this._context);
 		});
+	}
+
+	private uploadCameraData(camera: Camera, transform: Transform): void {
+		var buffer: CameraBuffer = new CameraBuffer;
+		buffer.world_to_camera = transform.world_to_object_matrix;
+		buffer.camera_to_projection = camera.camera_to_projection_matrix;
+		this._program.updateUniform(this._context, "Camera", buffer.data);
+	}
+
+	private uploadModelData(model: Model, transform: Transform): void {
+		var buffer: ModelBuffer = new ModelBuffer;
+		buffer.world = transform.object_to_world_matrix;
+		buffer.tex_transform = mat4.create();
+		mat4.invert(buffer.world_inv_transpose, buffer.world);
+		mat4.transpose(buffer.world_inv_transpose, buffer.world_inv_transpose);
+		this._program.updateUniform(this._context, "Model", buffer.data);
 	}
 }

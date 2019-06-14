@@ -13,8 +13,8 @@ export class TestScene extends Scene {
 		super();
 	}
 
-	load(): void {
-		var context: WebGLRenderingContext = Engine.rendering_mgr.context;
+	initialize(): void {
+		var context: WebGL2RenderingContext = Engine.rendering_mgr.context;
 
 		var cam: Entity = this.ecs.createEntity();
 		cam.addComponent(new Transform()).translation = vec3.fromValues(0, 0, 3);
@@ -34,7 +34,7 @@ export class TestScene extends Scene {
 		tris.addComponent(new Model(context, vertices));
 	}
 
-	unload(): void {
+	uninitialize(): void {
 		
 	}
 

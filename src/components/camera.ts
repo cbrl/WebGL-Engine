@@ -5,7 +5,7 @@ import { mat4 } from "gl-matrix";
 interface ICamera {
 	camera_to_projection_matrix: mat4;
 	viewport: Viewport;
-	bindViewport(context: WebGLRenderingContext): void;
+	bindViewport(context: WebGL2RenderingContext): void;
 }
 
 export abstract class Camera extends Component implements ICamera {
@@ -47,7 +47,7 @@ export abstract class Camera extends Component implements ICamera {
 		this._z_far = value;
 	}
 
-	bindViewport(context: WebGLRenderingContext): void {
+	bindViewport(context: WebGL2RenderingContext): void {
 		this.viewport.bind(context);
 	}
 }

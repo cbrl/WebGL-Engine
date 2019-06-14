@@ -1,4 +1,5 @@
 typescript
+@types/webgl2
 gl-matrix
 @types/gl-matrix
 gulp

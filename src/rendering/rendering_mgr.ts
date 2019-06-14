@@ -3,22 +3,25 @@ import { Renderer } from "./renderer";
 
 
 class WebGL {
-	private _context: WebGLRenderingContext;
+	private _context: WebGL2RenderingContext;
 
 	constructor(canvas: HTMLCanvasElement) {
-		this._context = canvas.getContext("webgl");
+		this._context = <WebGL2RenderingContext>canvas.getContext("webgl2");
+		if (!this._context) {
+			console.error("WebGL2 not supported");
+		}
 
 		this._context.viewport(0, 0, this._context.canvas.width, this._context.canvas.height);
 		this._context.scissor(0, 0, this._context.canvas.width, this._context.canvas.height);
 
 		this._context.clearColor(0, 0.6, 1.0, 1.0);
 
-		this._context.enable(WebGLRenderingContext.CULL_FACE);
-		this._context.enable(WebGLRenderingContext.SCISSOR_TEST);
-		this._context.enable(WebGLRenderingContext.DEPTH_TEST);
+		this._context.enable(WebGL2RenderingContext.CULL_FACE);
+		this._context.enable(WebGL2RenderingContext.SCISSOR_TEST);
+		this._context.enable(WebGL2RenderingContext.DEPTH_TEST);
 	}
 
-	get context(): WebGLRenderingContext {
+	get context(): WebGL2RenderingContext {
 		return this._context;
 	}
 }
@@ -35,13 +38,13 @@ export class RenderingMgr {
 
 	render(scene: Scene): void {
 		// Clear buffer
-		this._web_gl.context.clear(WebGLRenderingContext.COLOR_BUFFER_BIT | WebGLRenderingContext.DEPTH_BUFFER_BIT);
+		this._web_gl.context.clear(WebGL2RenderingContext.COLOR_BUFFER_BIT | WebGL2RenderingContext.DEPTH_BUFFER_BIT);
 
 		// Render scene
 		this._renderer.render(scene);
 	}
 
-	get context(): WebGLRenderingContext {
+	get context(): WebGL2RenderingContext {
 		return this._web_gl.context;
 	}
 }

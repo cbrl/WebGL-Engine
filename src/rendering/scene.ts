@@ -6,10 +6,21 @@ export abstract class Scene {
 	constructor() {}
 
 	// Called when a scene is being loaded by the engine
-	abstract load(): void;
+	load(): void {
+		// Add stuff required for the engine to operate correctly
+		this.initialize();
+	}
 
-	// Called when the engine's current scene (this one) is being replaced
-	abstract unload(): void;
+	unload(): void {
+		this.uninitialize();
+		// Remove stuff added in Scene.load()
+	}
+
+	// Overloaded by custom scenes and called during Scene.load()
+	abstract initialize(): void;
+
+	// Called when the engine's current scene (this one) is being destroyed
+	abstract uninitialize(): void;
 
 	// Called every tick
 	update(): void {
