@@ -8,7 +8,7 @@ import { ECS, Entity, Component, System } from "./ecs";
 import { Transform } from "./components/transform";
 import { PerspectiveCamera, OrthographicCamera } from "./components/camera";
 import { Model } from "./components/model";
-import { DirectionalLight } from "./components/directional_light";
+import { DirectionalLight, PointLight, SpotLight } from "./components/lights";
 
 
 export class TestScene extends Scene {
@@ -57,11 +57,25 @@ export class TestScene extends Scene {
 		tri2.addComponent(new Model(context, vertices_pos_color));
 
 		var light = this.ecs.createEntity();
-		light.addComponent(new Transform).translateZ(10);
+		light.addComponent(new Transform).translateZ(0.1);
+		// var spot_light = light.addComponent(new SpotLight);
+		// spot_light.base_color = [1, 1, 1];
+		// spot_light.intensity = 10;
+		// spot_light.range = 100;
+		// spot_light.attenuation = [0, 0, 1];
+		// spot_light.cos_penumbra = 0.05;
+		// spot_light.cos_umbra = 0.06;
+
+		// var point_light = light.addComponent(new PointLight);
+		// point_light.base_color = [1, 1, 1];
+		// point_light.intensity = 10;
+		// point_light.range = 100;
+		// point_light.attenuation = [0, 0, 0.8];
+		
 		var dir_light = light.addComponent(new DirectionalLight);
 		dir_light.base_color = [1, 1, 1];
 		dir_light.intensity = 3;
-		dir_light.proj_size = [2, 2];
+		dir_light.proj_size = [2.5, 2];
 		dir_light.range = 100;
 	}
 

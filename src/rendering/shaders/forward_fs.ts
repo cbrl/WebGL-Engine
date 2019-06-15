@@ -18,9 +18,11 @@ const float g_sqrt_2_div_pi = 0.79788456080;  // sqrt(2/pi)
 
 struct Material {
 	vec4   base_color;
+	
 	vec2   pad0;
 	float  roughness;
 	float  metalness;
+
 	vec3   emissive;
 	float  pad1;
 };
@@ -28,16 +30,20 @@ struct Material {
 struct DirectionalLight {
 	vec3  intensity;
 	float pad0;
+
 	vec3  direction;
 	float pad1;
+
 	mat4  world_to_projection;
 };
 
 struct PointLight {
 	vec3  intensity;
 	float pad0;
+
 	vec3  position;
 	float range;
+
 	vec3  attenuation;
 	float pad1;
 };
@@ -77,11 +83,6 @@ layout(std140) uniform Lights {
 	DirectionalLight directional_lights[MAX_DIRECTIONAL_LIGHTS];
 	PointLight       point_lights[MAX_POINT_LIGHTS];
 	SpotLight        spot_lights[MAX_SPOT_LIGHTS];
-
-	int              num_directional_lights;
-	int              num_point_lights;
-	int              num_spot_lights;
-	float            lb_pad0;
 } lights;
 
 
@@ -207,10 +208,38 @@ void ComputeBRDF(vec3 p_to_light, vec3 normal, vec3 p_to_view, Material mat, out
 vec3 CalculateLights(vec3 p_world, vec3 normal, vec3 p_to_view, Material material) {
 	vec3 radiance = vec3(0.0f);
 
-	for (int i0 = 0; i0 < 1; ++i0) {
+	for (int i0 = 0; i0 < MAX_DIRECTIONAL_LIGHTS; ++i0) {
 		vec3 p_to_light, irradiance;
 
 		CalculateLight(lights.directional_lights[i0], p_world, p_to_light, irradiance);
+
+		if (all(equal(irradiance, vec3(0.0f))))
+			continue;
+
+		vec3 D, S;
+		ComputeBRDF(p_to_light, normal, p_to_view, material, D, S);
+
+		radiance += (D + S) * irradiance * clamp(dot(normal, p_to_light), 0.0f, 1.0f);
+	}
+
+	for (int i1 = 0; i1 < MAX_POINT_LIGHTS; ++i1) {
+		vec3 p_to_light, irradiance;
+
+		CalculateLight(lights.point_lights[i1], p_world, p_to_light, irradiance);
+
+		if (all(equal(irradiance, vec3(0.0f))))
+			continue;
+
+		vec3 D, S;
+		ComputeBRDF(p_to_light, normal, p_to_view, material, D, S);
+
+		radiance += (D + S) * irradiance * clamp(dot(normal, p_to_light), 0.0f, 1.0f);
+	}
+
+	for (int i2 = 0; i2 < MAX_SPOT_LIGHTS; ++i2) {
+		vec3 p_to_light, irradiance;
+
+		CalculateLight(lights.spot_lights[i2], p_world, p_to_light, irradiance);
 
 		if (all(equal(irradiance, vec3(0.0f))))
 			continue;

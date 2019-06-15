@@ -257,19 +257,13 @@ export class LightBuffer implements Buffer {
 
 	private static readonly _length: number = (LightBuffer.max_directional_lights * DirectionalLightBuffer.numElements)
 	                                           + (LightBuffer.max_point_lights * PointLightBuffer.numElements)
-	                                           + (LightBuffer.max_spot_lights * SpotLightBuffer.numElements)
-											   + 4;
+	                                           + (LightBuffer.max_spot_lights * SpotLightBuffer.numElements);
 											   
 	private static readonly _size: number = LightBuffer._length * Float32Array.BYTES_PER_ELEMENT;
 
 	directional_lights: DirectionalLightBuffer[] = new Array<DirectionalLightBuffer>();
 	point_lights: PointLightBuffer[] = new Array<PointLightBuffer>();
 	spot_lights: SpotLightBuffer[] = new Array<SpotLightBuffer>();
-
-	num_directional_lights: number = 0;
-	num_point_lights: number = 0;
-	num_spot_lights: number = 0;
-	pad0: number = 0;
 
 	static get size(): number {
 		return LightBuffer._size;
@@ -318,18 +312,6 @@ export class LightBuffer implements Buffer {
 			out.set(new Float32Array(SpotLightBuffer.numElements), offset);
 			offset += SpotLightBuffer.numElements;
 		}
-
-		out.set([this.directional_lights.length], offset);
-		offset += 1;
-
-		out.set([this.point_lights.length], offset);
-		offset += 1;
-
-		out.set([this.spot_lights.length], offset);
-		offset += 1;
-
-		out.set([0], offset);
-		offset += 1;
 
 		return out;
 	}
