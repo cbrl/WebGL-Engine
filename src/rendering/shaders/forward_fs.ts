@@ -1,11 +1,29 @@
 export const forward_fs = String.raw`#version 300 es
 precision mediump float;
 
-in vec3 world_position;
+in vec3 position_world;
 in vec3 normal;
 in vec3 color;
 
 layout(location = 0) out vec4 out_color;
+
+// Precomputed Pi values
+const float g_pi            = 3.14159265359;  // pi
+const float g_2pi           = 6.28318530718;  // 2*pi
+const float g_inv_pi        = 0.31830988618;  // 1/pi
+const float g_inv_2pi       = 0.15915494309;  // 1/(2*pi)
+const float g_pi_div_2      = 1.57079632679;  // pi/2
+const float g_pi_div_4      = 0.78539816339;  // pi/4
+const float g_sqrt_2_div_pi = 0.79788456080;  // sqrt(2/pi)
+
+struct Material {
+	vec4   base_color;
+	vec2   pad0;
+	float  roughness;
+	float  metalness;
+	vec3   emissive;
+	float  pad1;
+};
 
 struct DirectionalLight {
 	vec3  intensity;
@@ -39,16 +57,32 @@ struct SpotLight {
 };
 
 
+layout(std140) uniform Camera {
+	mat4 camera_to_world;
+	mat4 world_to_camera;
+	mat4 camera_to_projection;
+	mat4 projection_to_camera;
+} camera;
+
+vec3 CameraPosition() {
+	return camera.camera_to_world[3].xyz;
+	//return g_camera_to_world._41_42_43;
+}
+
+
+#define MAX_DIRECTIONAL_LIGHTS 8
+#define MAX_POINT_LIGHTS 8
+#define MAX_SPOT_LIGHTS 8
 layout(std140) uniform Lights {
-	DirectionalLight g_directional_lights[8];
-	PointLight       g_point_lights[8];
-	SpotLight        g_spot_lights[8];
-	
-	float            n_directional_lights;
-	float            n_point_lights;
-	float            n_spot_lights;
+	DirectionalLight directional_lights[MAX_DIRECTIONAL_LIGHTS];
+	PointLight       point_lights[MAX_POINT_LIGHTS];
+	SpotLight        spot_lights[MAX_SPOT_LIGHTS];
+
+	int              num_directional_lights;
+	int              num_point_lights;
+	int              num_spot_lights;
 	float            lb_pad0;
-};
+} lights;
 
 
 
@@ -97,7 +131,7 @@ void CalculateLight(DirectionalLight light, vec3 p_world, out vec3 p_to_light, o
 	vec4 p_clip = light.world_to_projection * vec4(p_world, 1.0f);
 	p_ndc = PerspectiveDiv(p_clip);
 
-	irradiance = (any(lessThan(vec3(1.0f), abs(p_ndc))) || 0.0f > p_ndc.z) ? vec3(0.0f) : light.intensity;
+	irradiance = (any(lessThan(vec3(1.0f), abs(p_ndc))) || 0.0f < p_ndc.z) ? vec3(0.0f) : light.intensity;
 }
 
 void CalculateLight(DirectionalLight light, vec3 p_world, out vec3 p_to_light, out vec3 irradiance) {
@@ -136,7 +170,10 @@ void CalculateLight(PointLight light, vec3 p_world, out vec3 p_to_light, out vec
 }
 
 
-void Calculate(SpotLight light, vec3 p_world, out vec3 p_to_light, out vec3 irradiance) {
+//----------------------------------------------------------------------------------
+// Lighting Calculation - Spot Light
+//----------------------------------------------------------------------------------
+void CalculateLight(SpotLight light, vec3 p_world, out vec3 p_to_light, out vec3 irradiance) {
 	// The vector from the surface to the light.
 	p_to_light = light.position - p_world;
 
@@ -157,12 +194,61 @@ void Calculate(SpotLight light, vec3 p_world, out vec3 p_to_light, out vec3 irra
 	}
 }
 
+void Lambert(vec3 l, vec3 n, vec3 v, Material mat, out vec3 diffuse, out vec3 specular) {
+	diffuse  = (1.0f - mat.metalness) * mat.base_color.xyz * g_inv_pi;
+	specular = vec3(0.0f);
+}
 
-//----------------------------------------------------------------------------------
-// Lighting Calculation - Spot Light
-//----------------------------------------------------------------------------------
+void ComputeBRDF(vec3 p_to_light, vec3 normal, vec3 p_to_view, Material mat, out vec3 diffuse, out vec3 specular) {
+	Lambert(p_to_light, normal, p_to_view, mat, diffuse, specular);
+}
+
+
+vec3 CalculateLights(vec3 p_world, vec3 normal, vec3 p_to_view, Material material) {
+	vec3 radiance = vec3(0.0f);
+
+	for (int i0 = 0; i0 < 1; ++i0) {
+		vec3 p_to_light, irradiance;
+
+		CalculateLight(lights.directional_lights[i0], p_world, p_to_light, irradiance);
+
+		if (all(equal(irradiance, vec3(0.0f))))
+			continue;
+
+		vec3 D, S;
+		ComputeBRDF(p_to_light, normal, p_to_view, material, D, S);
+
+		radiance += (D + S) * irradiance * clamp(dot(normal, p_to_light), 0.0f, 1.0f);
+	}
+	
+	return radiance;
+}
+
+
+vec3 CalculateLighting(vec3 p_world, vec3 normal, Material material) {
+	vec3 radiance = vec3(0.0f);
+	
+	vec3  p_to_view      = CameraPosition() - p_world;
+	float dist_p_to_view = length(p_to_view);
+	p_to_view /= dist_p_to_view;
+
+	radiance += CalculateLights(p_world, normal, p_to_view, material);
+
+	return radiance;
+}
+
 
 void main() {
-	out_color = vec4(color, 1);
+	Material mat;
+	mat.base_color = vec4(color, 1.0f);
+	mat.metalness = 0.0f;
+	mat.roughness = 1.0f;
+	mat.emissive = vec3(0.0f);
+
+	vec3 lit_color = CalculateLighting(position_world, normal, mat);
+	lit_color = clamp(lit_color, 0.0f, 1.0f);
+	
+	out_color = vec4(lit_color, 1.0f);
+	//out_color = vec4(color, 1.0f);
 }
 `;

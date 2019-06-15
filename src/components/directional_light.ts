@@ -12,7 +12,7 @@ export class DirectionalLight extends Component {
 
 	get light_to_projection_matrix(): mat4 {
 		var out: mat4 = mat4.create();
-		mat4.ortho(out, 0, this.proj_size[0], 0, this.proj_size[1], this.start, this.range);
+		mat4.ortho(out, -this.proj_size[0]/2, this.proj_size[0]/2, -this.proj_size[1]/2, this.proj_size[1]/2, this.start, this.range);
 		return out;
 	}
 }

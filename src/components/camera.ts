@@ -70,7 +70,7 @@ export class OrthographicCamera extends Camera {
 	
 	get camera_to_projection_matrix(): mat4 {
 		var matrix = mat4.create();
-		mat4.ortho(matrix, 0, this._ortho_size[0], 0, this._ortho_size[1], this._z_near, this._z_far);
+		mat4.ortho(matrix, -this._ortho_size[0]/2, this._ortho_size[0]/2, -this._ortho_size[1]/2, this._ortho_size[1]/2, this._z_near, this._z_far);
 		return matrix;
 	}
 }

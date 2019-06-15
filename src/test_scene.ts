@@ -8,6 +8,7 @@ import { ECS, Entity, Component, System } from "./ecs";
 import { Transform } from "./components/transform";
 import { PerspectiveCamera, OrthographicCamera } from "./components/camera";
 import { Model } from "./components/model";
+import { DirectionalLight } from "./components/directional_light";
 
 
 export class TestScene extends Scene {
@@ -43,6 +44,10 @@ export class TestScene extends Scene {
 			new VertexPositionColor([-0.5,  0,   0], [0, 1, 1]),
 		];
 
+		var tri0 = this.ecs.createEntity();
+		tri0.addComponent(new Transform);
+		tri0.addComponent(new Model(context, vertices_pos_norm_color));
+
 		var tri1 = this.ecs.createEntity();
 		tri1.addComponent(new Transform()).translateX(-1);
 		tri1.addComponent(new Model(context, vertices_pos_norm_color));
@@ -50,6 +55,14 @@ export class TestScene extends Scene {
 		var tri2 = this.ecs.createEntity();
 		tri2.addComponent(new Transform()).translateX(1);
 		tri2.addComponent(new Model(context, vertices_pos_color));
+
+		var light = this.ecs.createEntity();
+		light.addComponent(new Transform).translateZ(10);
+		var dir_light = light.addComponent(new DirectionalLight);
+		dir_light.base_color = [1, 1, 1];
+		dir_light.intensity = 3;
+		dir_light.proj_size = [2, 2];
+		dir_light.range = 100;
 	}
 
 	uninitialize(): void {

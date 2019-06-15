@@ -1,23 +1,26 @@
 export const forward_vs = String.raw`#version 300 es
+precision mediump float;
 
 in vec3 in_position;
 in vec3 in_normal;
 in vec3 in_color;
 
-out vec3 world_position;
+out vec3 position_world;
 out vec3 normal;
 out vec3 color;
 
 layout(std140) uniform Camera {
-	mat4 g_world_to_camera;
-	mat4 g_camera_to_projection;
-};
+	mat4 camera_to_world;
+	mat4 world_to_camera;
+	mat4 camera_to_projection;
+	mat4 projection_to_camera;
+} camera;
 
 layout(std140) uniform Model {
-	mat4 g_model_to_world;
-	mat4 g_world_inv_transpose;
-	mat4 g_tex_transform;
-};
+	mat4 model_to_world;
+	mat4 world_inv_transpose;
+	mat4 tex_transform;
+} model;
 
 
 // Transform a texture
@@ -86,8 +89,8 @@ PositionNormalTexture Transform(vec3 position,
 
 
 void main() {
-	gl_Position = Transform(in_position, g_model_to_world, g_world_to_camera, g_camera_to_projection);
-	world_position = (g_model_to_world * vec4(in_position, 1.0f)).xyz;
+	gl_Position = Transform(in_position, model.model_to_world, camera.world_to_camera, camera.camera_to_projection);
+	position_world = (model.model_to_world * vec4(in_position, 1.0f)).xyz;
 	normal = in_normal;
 	color = in_color;
 }

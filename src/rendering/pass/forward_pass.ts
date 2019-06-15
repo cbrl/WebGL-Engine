@@ -49,8 +49,12 @@ export class ForwardPass {
 
 	private uploadCameraData(camera: Camera, transform: Transform): void {
 		var buffer: CameraBuffer = new CameraBuffer;
+
+		buffer.camera_to_world = transform.object_to_world_matrix;
 		buffer.world_to_camera = transform.world_to_object_matrix;
 		buffer.camera_to_projection = camera.camera_to_projection_matrix;
+		mat4.invert(buffer.projection_to_camera, buffer.camera_to_projection);
+		
 		this._program.updateUniform(this._context, "Camera", buffer.data);
 	}
 

@@ -42,8 +42,7 @@ export class LightPass {
 			vec3.copy(lbuffer.intensity, light.base_color);
 			vec3.scale(lbuffer.intensity, lbuffer.intensity, light.intensity)
 			
-			mat4.copy(lbuffer.world_to_projection, transform.object_to_world_matrix);
-			mat4.multiply(lbuffer.world_to_projection, light.light_to_projection_matrix, lbuffer.world_to_projection);
+			mat4.multiply(lbuffer.world_to_projection, light.light_to_projection_matrix, transform.world_to_object_matrix);
 
 			this._light_buffer.directional_lights.push(lbuffer);
 		});
