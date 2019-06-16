@@ -257,13 +257,17 @@ export class LightBuffer implements Buffer {
 
 	private static readonly _length: number = (LightBuffer.max_directional_lights * DirectionalLightBuffer.numElements)
 	                                           + (LightBuffer.max_point_lights * PointLightBuffer.numElements)
-	                                           + (LightBuffer.max_spot_lights * SpotLightBuffer.numElements);
+											   + (LightBuffer.max_spot_lights * SpotLightBuffer.numElements)
+	                                           + 4;
 											   
 	private static readonly _size: number = LightBuffer._length * Float32Array.BYTES_PER_ELEMENT;
 
 	directional_lights: DirectionalLightBuffer[] = new Array<DirectionalLightBuffer>();
 	point_lights: PointLightBuffer[] = new Array<PointLightBuffer>();
 	spot_lights: SpotLightBuffer[] = new Array<SpotLightBuffer>();
+
+	ambient_intensity: vec3 = vec3.create();
+	pad0: number = 0;
 
 	static get size(): number {
 		return LightBuffer._size;
@@ -312,6 +316,14 @@ export class LightBuffer implements Buffer {
 			out.set(new Float32Array(SpotLightBuffer.numElements), offset);
 			offset += SpotLightBuffer.numElements;
 		}
+
+		// Ambient Light
+		out.set(this.ambient_intensity, offset);
+		offset += 3;
+
+		// Padding
+		out.set([0], offset);
+		offset += 1;
 
 		return out;
 	}

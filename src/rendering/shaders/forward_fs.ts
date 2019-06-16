@@ -63,6 +63,9 @@ struct SpotLight {
 };
 
 
+//----------------------------------------------------------------------------------
+// Camera Buffer
+//----------------------------------------------------------------------------------
 layout(std140) uniform Camera {
 	mat4 camera_to_world;
 	mat4 world_to_camera;
@@ -76,13 +79,19 @@ vec3 CameraPosition() {
 }
 
 
+//----------------------------------------------------------------------------------
+// Light Buffer
+//----------------------------------------------------------------------------------
 #define MAX_DIRECTIONAL_LIGHTS 8
 #define MAX_POINT_LIGHTS 8
 #define MAX_SPOT_LIGHTS 8
+
 layout(std140) uniform Lights {
 	DirectionalLight directional_lights[MAX_DIRECTIONAL_LIGHTS];
 	PointLight       point_lights[MAX_POINT_LIGHTS];
 	SpotLight        spot_lights[MAX_SPOT_LIGHTS];
+	vec3             ambient_intensity;
+	float            pad0;
 } lights;
 
 
@@ -261,9 +270,16 @@ vec3 CalculateLighting(vec3 p_world, vec3 normal, Material material) {
 	float dist_p_to_view = length(p_to_view);
 	p_to_view /= dist_p_to_view;
 
+	// Calculate radiance
 	radiance += CalculateLights(p_world, normal, p_to_view, material);
 
-	return radiance;
+	// Calculate ambient light
+	vec3 ambient;
+	vec3 null;
+	Lambert(vec3(0.0f), vec3(0.0f), vec3(0.0f), material, ambient, null);
+	ambient *= lights.ambient_intensity;
+
+	return radiance + ambient;
 }
 
 

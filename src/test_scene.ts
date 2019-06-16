@@ -8,7 +8,7 @@ import { ECS, Entity, Component, System } from "./ecs";
 import { Transform } from "./components/transform";
 import { PerspectiveCamera, OrthographicCamera } from "./components/camera";
 import { Model } from "./components/model";
-import { DirectionalLight, PointLight, SpotLight } from "./components/lights";
+import { DirectionalLight, PointLight, SpotLight, AmbientLight } from "./components/lights";
 
 
 export class TestScene extends Scene {
@@ -20,9 +20,9 @@ export class TestScene extends Scene {
 	initialize(): void {
 		var context: WebGL2RenderingContext = Engine.rendering_mgr.context;
 
-		var cam: Entity = this.ecs.createEntity();
-		var transform: Transform = cam.addComponent(new Transform());
-		var camera: PerspectiveCamera = cam.addComponent(new PerspectiveCamera());
+		var cam = this.ecs.createEntity();
+		var transform = cam.addComponent(new Transform());
+		var camera = cam.addComponent(new PerspectiveCamera());
 		transform.translateZ(3);
 
 		const vertices_pos_norm_color: VertexPositionNormalColor[] = [
@@ -77,6 +77,12 @@ export class TestScene extends Scene {
 		dir_light.intensity = 3;
 		dir_light.proj_size = [2.5, 2];
 		dir_light.range = 100;
+
+		
+		var ambient_light = this.ecs.createEntity();
+		var ambient = ambient_light.addComponent(new AmbientLight);
+		ambient.base_color = [1, 1, 1];
+		ambient.intensity = 0.5;
 	}
 
 	uninitialize(): void {

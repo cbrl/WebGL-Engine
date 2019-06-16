@@ -1,6 +1,11 @@
 import { Component } from "../ecs";
 import { mat4 } from "gl-matrix";
 
+export class AmbientLight extends Component {
+	base_color: [number, number, number] = [0, 0, 0];
+	intensity: number = 0;
+}
+
 export class DirectionalLight extends Component {
 	base_color: [number, number, number] = [0, 0, 0];
 	intensity: number = 0;

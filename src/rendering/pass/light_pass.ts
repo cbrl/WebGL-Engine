@@ -4,7 +4,7 @@ import { LightBuffer, DirectionalLightBuffer, PointLightBuffer, SpotLightBuffer 
 
 import { Entity } from "../../ecs";
 import { Transform } from "../../components/transform";
-import { DirectionalLight, PointLight, SpotLight } from "../../components/lights";
+import { AmbientLight, DirectionalLight, PointLight, SpotLight } from "../../components/lights";
 import { vec3, mat4 } from "gl-matrix";
 
 export class LightPass {
@@ -16,14 +16,29 @@ export class LightPass {
 	}
 
 	updateLightBuffer(scene: Scene, program: Program): void {
+		this.updateAmbientLight(scene);
 		this.updateDirectionalLights(scene);
 		this.updatePointLights(scene);
 		this.updateSpotLights(scene);
+
 		this.uploadLightBuffer(program);
 	}
 
 	private uploadLightBuffer(program: Program): void {
 		program.updateUniform(this._context, "Lights", this._light_buffer.data);
+	}
+
+	private updateAmbientLight(scene: Scene): void {
+		this._light_buffer.ambient_intensity = vec3.create();
+
+		scene.ecs.forEach([AmbientLight], (entity: Entity) => {
+			var light = entity.getComponent(AmbientLight);
+
+			var ambient = vec3.create();
+			vec3.copy(ambient, light.base_color);
+			vec3.scale(ambient, ambient, light.intensity);
+			vec3.add(this._light_buffer.ambient_intensity, this._light_buffer.ambient_intensity, ambient);
+		});
 	}
 
 	private updateDirectionalLights(scene: Scene): void {
@@ -33,10 +48,10 @@ export class LightPass {
 			if (this._light_buffer.directional_lights.length >= LightBuffer.max_directional_lights)
 				return;
 
-			var transform: Transform = entity.getComponent(Transform);
-			var light: DirectionalLight = entity.getComponent(DirectionalLight);
+			var transform = entity.getComponent(Transform);
+			var light = entity.getComponent(DirectionalLight);
 			
-			var lbuffer: DirectionalLightBuffer = new DirectionalLightBuffer;
+			var lbuffer = new DirectionalLightBuffer;
 
 			vec3.copy(lbuffer.intensity, light.base_color);
 			vec3.scale(lbuffer.intensity, lbuffer.intensity, light.intensity)
@@ -55,10 +70,10 @@ export class LightPass {
 			if (this._light_buffer.point_lights.length >= LightBuffer.max_point_lights)
 				return;
 
-			var transform: Transform = entity.getComponent(Transform);
-			var light: PointLight = entity.getComponent(PointLight);
+			var transform = entity.getComponent(Transform);
+			var light = entity.getComponent(PointLight);
 
-			var lbuffer: PointLightBuffer = new PointLightBuffer;
+			var lbuffer = new PointLightBuffer;
 
 			vec3.copy(lbuffer.intensity, light.base_color);
 			vec3.scale(lbuffer.intensity, lbuffer.intensity, light.intensity);
@@ -78,10 +93,10 @@ export class LightPass {
 			if (this._light_buffer.spot_lights.length >= LightBuffer.max_spot_lights)
 				return;
 
-			var transform: Transform = entity.getComponent(Transform);
-			var light: SpotLight = entity.getComponent(SpotLight);
+			var transform = entity.getComponent(Transform);
+			var light = entity.getComponent(SpotLight);
 
-			var lbuffer: SpotLightBuffer = new SpotLightBuffer;
+			var lbuffer = new SpotLightBuffer;
 
 			vec3.copy(lbuffer.intensity, light.base_color);
 			vec3.scale(lbuffer.intensity, lbuffer.intensity, light.intensity);
