@@ -5,4 +5,6 @@ gl-matrix
 gulp
 browserify
 tsify
+gulp-beautify
 vinyl-source-stream
+vinyl-buffer
