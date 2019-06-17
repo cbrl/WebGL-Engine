@@ -107,21 +107,21 @@ class Transform3D {
 
 	get world_axis_x(): vec3 {
 		this.updateMatrix();
-		var out: vec3 = vec3.fromValues(this._object_to_world[0], this._object_to_world[1], -this._object_to_world[2]);
+		var out: vec3 = vec3.fromValues(this._object_to_world[0], this._object_to_world[1], this._object_to_world[2]);
 		vec3.normalize(out, out);
 		return out;
 	}
 
 	get world_axis_y(): vec3 {
 		this.updateMatrix();
-		var out: vec3 = vec3.fromValues(this._object_to_world[4], this._object_to_world[5], -this._object_to_world[6]);
+		var out: vec3 = vec3.fromValues(this._object_to_world[4], this._object_to_world[5], this._object_to_world[6]);
 		vec3.normalize(out, out);
 		return out;
 	}
 
 	get world_axis_z(): vec3 {
 		this.updateMatrix();
-		var out: vec3 = vec3.fromValues(this._object_to_world[8], this._object_to_world[9], -this._object_to_world[10]);
+		var out: vec3 = vec3.fromValues(-this._object_to_world[8], -this._object_to_world[9], -this._object_to_world[10]);
 		vec3.normalize(out, out);
 		return out;
 	}
