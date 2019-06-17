@@ -7,6 +7,7 @@ export enum VertexLocations {
 	TEXCOORD = 3,
 }
 
+
 export class VertexDesc {
 	semantic_name: string;
 	location: number;
@@ -32,11 +33,13 @@ export class VertexDesc {
 	}
 }
 
+
 export interface Vertex {
 	[key: string]: any;
 	readonly vertex_descs: VertexDesc[];
 	position: vec3;
 }
+
 
 export class VertexPosition implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
@@ -57,6 +60,7 @@ export class VertexPosition implements Vertex {
 		return VertexPosition._vertex_descs;
 	}
 }
+
 
 export class VertexPositionColor implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
@@ -81,6 +85,7 @@ export class VertexPositionColor implements Vertex {
 	}
 }
 
+
 export class VertexPositionNormalColor implements Vertex {
 	private static readonly _vertex_descs: VertexDesc[] = [
 		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 9*Float32Array.BYTES_PER_ELEMENT, 0),
@@ -92,7 +97,7 @@ export class VertexPositionNormalColor implements Vertex {
 	normal: vec3 = vec3.create();
 	color: vec3 = vec3.create();
 
-	constructor(position: vec3 | vec3 | number[], normal: vec3 | number[], color: vec3 | number[]) {
+	constructor(position: vec3 | number[], normal: vec3 | number[], color: vec3 | number[]) {
 		vec3.copy(this.position, position);
 		vec3.copy(this.normal, normal);
 		vec3.copy(this.color, color);
@@ -107,6 +112,7 @@ export class VertexPositionNormalColor implements Vertex {
 	}
 }
 
+
 export class VertexPositionNormalTexture implements Vertex {
 	private static _vertex_descs: VertexDesc[] = [
 		new VertexDesc("in_position", VertexLocations.POSITION, 3, WebGL2RenderingContext.FLOAT, false, 8*Float32Array.BYTES_PER_ELEMENT, 0),
@@ -118,7 +124,7 @@ export class VertexPositionNormalTexture implements Vertex {
 	normal: vec3 = vec3.create();
 	texcoord: vec2 = vec2.create();
 
-	constructor(position: vec3 | vec3 | number[], normal: vec3 | number[], texcoord: vec2 | number[]) {
+	constructor(position: vec3 | number[], normal: vec3 | number[], texcoord: vec2 | number[]) {
 		vec3.copy(this.position, position);
 		vec3.copy(this.normal, normal);
 		vec2.copy(this.texcoord, texcoord);
