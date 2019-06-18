@@ -1,4 +1,4 @@
-import { UniformBuffer } from "./uniform_buffer";
+import { UniformBuffer } from "./buffer/uniform_buffer";
 
 abstract class Shader {
 	private _shader: WebGLShader;

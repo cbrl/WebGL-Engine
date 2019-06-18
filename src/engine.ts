@@ -1,6 +1,6 @@
 import { RenderingMgr } from "./rendering/rendering_mgr";
 import { Scene } from "./rendering/scene";
-import { TestScene } from "./test_scene";
+import { TestScene } from "./scenes/test_scene";
 
 export class Engine {
 	private static _instance: Engine = new Engine();

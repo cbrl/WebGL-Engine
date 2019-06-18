@@ -1,15 +1,15 @@
-import { ForwardProgram } from "../programs/forward_program";
+import { ForwardProgram } from "../../programs/forward_program";
 import { LightPass } from "./light_pass";
 
-import { Scene } from "../scene";
+import { Scene } from "../../scene";
 
-import { Entity } from "../../ecs";
-import { Transform } from "../../components/transform";
-import { Camera } from "../../components/camera";
-import { Model } from "../../components/model";
+import { Entity } from "../../../ecs";
+import { Transform } from "../../../components/transform";
+import { Camera } from "../../../components/camera";
+import { Model } from "../../../components/model";
 
 import { mat4 } from "gl-matrix";
-import { ModelBuffer, CameraBuffer } from "../buffer/buffers";
+import { ModelBuffer, CameraBuffer } from "../../buffer/buffers";
  
 export class ForwardPass {
 	private _context: WebGL2RenderingContext;

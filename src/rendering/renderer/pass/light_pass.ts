@@ -1,10 +1,10 @@
-import { Scene } from "../scene";
-import { Program } from "../shader";
-import { LightBuffer, DirectionalLightBuffer, PointLightBuffer, SpotLightBuffer } from "../buffer/buffers";
+import { Scene } from "../../scene";
+import { Program } from "../../shader";
+import { LightBuffer, DirectionalLightBuffer, PointLightBuffer, SpotLightBuffer } from "../../buffer/buffers";
 
-import { Entity } from "../../ecs";
-import { Transform } from "../../components/transform";
-import { AmbientLight, DirectionalLight, PointLight, SpotLight } from "../../components/lights";
+import { Entity } from "../../../ecs";
+import { Transform } from "../../../components/transform";
+import { AmbientLight, DirectionalLight, PointLight, SpotLight } from "../../../components/lights";
 import { vec3, mat4 } from "gl-matrix";
 
 export class LightPass {

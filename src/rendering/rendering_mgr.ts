@@ -1,5 +1,5 @@
 import { Scene } from "./scene";
-import { Renderer } from "./renderer";
+import { Renderer } from "./renderer/renderer";
 
 
 class WebGL {

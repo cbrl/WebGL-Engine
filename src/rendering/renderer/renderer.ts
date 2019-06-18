@@ -1,12 +1,12 @@
-import { VertexPositionColor } from "./vertex";
-import { VertexShader, FragmentShader, Program } from "./shader";
-import { Scene } from "./scene";
+import { VertexPositionColor } from "../vertex";
+import { VertexShader, FragmentShader, Program } from "../shader";
+import { Scene } from "../scene";
 import { ForwardPass } from "./pass/forward_pass";
 
-import { Entity } from "../ecs";
-import { Transform } from "../components/transform";
-import { Camera, OrthographicCamera, PerspectiveCamera } from "../components/camera";
-import { Model } from "../components/model";
+import { Entity } from "../../ecs";
+import { Transform } from "../../components/transform";
+import { Camera, OrthographicCamera, PerspectiveCamera } from "../../components/camera";
+import { Model } from "../../components/model";
 
 import { mat4 } from "gl-matrix";
 

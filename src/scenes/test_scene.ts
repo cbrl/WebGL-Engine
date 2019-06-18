@@ -1,14 +1,14 @@
-import { Engine } from "./engine";
-import { Scene } from "./rendering/scene";
-import { VertexPositionNormalColor, VertexPositionColor } from "./rendering/vertex";
+import { Engine } from "../engine";
+import { Scene } from "../rendering/scene";
+import { VertexPositionNormalColor, VertexPositionColor } from "../rendering/vertex";
 import { vec3 } from "gl-matrix";
-import { calculateNormals } from "./math";
+import { calculateNormals } from "../math";
 
-import { ECS, Entity, Component, System } from "./ecs";
-import { Transform } from "./components/transform";
-import { PerspectiveCamera, OrthographicCamera } from "./components/camera";
-import { Model } from "./components/model";
-import { DirectionalLight, PointLight, SpotLight, AmbientLight } from "./components/lights";
+import { ECS, Entity, Component, System } from "../ecs";
+import { Transform } from "../components/transform";
+import { PerspectiveCamera, OrthographicCamera } from "../components/camera";
+import { Model } from "../components/model";
+import { DirectionalLight, PointLight, SpotLight, AmbientLight } from "../components/lights";
 
 
 export class TestScene extends Scene {
