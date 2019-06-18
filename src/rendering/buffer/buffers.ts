@@ -1,4 +1,5 @@
 import { vec2, vec3, mat4 } from "gl-matrix";
+import { Material } from "../../components/model";
 
 export enum UniformBufferLocations {
 	CAMERA = 0,
@@ -56,12 +57,13 @@ export class CameraBuffer implements Buffer {
 }
 
 export class ModelBuffer implements Buffer {
-	private static readonly _length: number = 3 * 16;
+	private static readonly _length: number = (3 * 16) + 8;
 	private static readonly _size: number = ModelBuffer._length * Float32Array.BYTES_PER_ELEMENT;
 	
 	world: mat4 = mat4.create();
 	world_inv_transpose: mat4 = mat4.create();
 	tex_transform: mat4 = mat4.create();
+	material: Material;
 
 	static get size(): number {
 		return ModelBuffer._size;
@@ -89,6 +91,15 @@ export class ModelBuffer implements Buffer {
 
 		out.set(this.tex_transform, offset);
 		offset += 16;
+
+		out.set(this.material.base_color, offset);
+		offset += 4;
+
+		out.set([this.material.roughness, this.material.metalness], offset);
+		offset += 2;
+
+		out.set([0, 0], offset);
+		offset += 2;
 
 		return out;
 	}

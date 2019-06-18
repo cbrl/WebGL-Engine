@@ -1,7 +1,16 @@
 import { Component } from "../ecs";
 import { Vertex, VertexArrayToFloat32Array } from "../rendering/vertex";
+import { vec4 } from "gl-matrix";
+
+export class Material {
+	base_color: vec4 = vec4.create();
+	metalness: number = 0;
+	roughness: number = 1;	
+}
 
 export class Model extends Component {
+	material: Material = new Material;
+	
 	primitive_type: number;
 	private _vertex_array: WebGLVertexArrayObject;
 	private _vertex_buffer: WebGLBuffer;

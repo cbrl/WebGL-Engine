@@ -16,10 +16,19 @@ layout(std140) uniform Camera {
 	mat4 projection_to_camera;
 } camera;
 
+
+struct Material {
+	vec4 base_color;
+	float roughness;
+	float metalness;
+	vec2 pad;
+};
+
 layout(std140) uniform Model {
 	mat4 model_to_world;
 	mat4 world_inv_transpose;
 	mat4 tex_transform;
+	Material material;
 } model;
 
 
