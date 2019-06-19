@@ -15,17 +15,17 @@ export class LightPass {
 		this._context = context;
 	}
 
-	updateLightBuffer(scene: Scene, program: Program): void {
+	updateLightBuffer(scene: Scene): void {
 		this.updateAmbientLight(scene);
 		this.updateDirectionalLights(scene);
 		this.updatePointLights(scene);
 		this.updateSpotLights(scene);
 
-		this.uploadLightBuffer(program);
+		this.uploadLightBuffer();
 	}
 
-	private uploadLightBuffer(program: Program): void {
-		program.updateUniform(this._context, "Lights", this._light_buffer.data);
+	private uploadLightBuffer(): void {
+		Program.updateUniformBuffer(this._context, "Lights", this._light_buffer.data);
 	}
 
 	private updateAmbientLight(scene: Scene): void {

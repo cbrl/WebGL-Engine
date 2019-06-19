@@ -41,7 +41,8 @@ export class Program {
 	private _vertex_shader: VertexShader;
 	private _fragment_shader: FragmentShader;
 	private _program: WebGLProgram;
-	private _buffers: Map<string, UniformBuffer> = new Map();
+	private _uniform_locations: Map<string, WebGLUniformLocation> = new Map();
+	private static _uniform_buffers: Map<string, UniformBuffer> = new Map();
 
 	constructor(context: WebGL2RenderingContext, vertex_shader: VertexShader, fragment_shader: FragmentShader) {
 		this._vertex_shader = vertex_shader;
@@ -87,24 +88,40 @@ export class Program {
 		context.useProgram(this._program);
 	}
 
-	addUniform(context: WebGL2RenderingContext, name: string, size: number, slot: number): void {
-		if (!this._buffers.get(name)) {
-			this._buffers.set(name, new UniformBuffer(context, size, slot));
-			const index: number = context.getUniformBlockIndex(this._program, name);
-			context.uniformBlockBinding(this._program, index, slot);
+	updateUniformvalue(context: WebGL2RenderingContext, gl_update_func: Function, name: string, value: any): void {
+		this.bindProgram(context);
+		var location: WebGLUniformLocation = this._uniform_locations.get(name)
+		if (!location) {
+			location = context.getUniformLocation(this.gl_program, name);
+			this._uniform_locations.set(name, location);
 		}
-		else {
-			console.warn("Attempting to add uniform \"" + name + "\", but one already exits with that name.");
+		if (location != WebGL2RenderingContext.INVALID_INDEX) {
+			gl_update_func.call(context, location, value);
 		}
 	}
 
-	updateUniform<T extends ArrayBufferView>(context: WebGL2RenderingContext, name: string, data: T): void {
-		var buffer: UniformBuffer = this._buffers.get(name);
+	// Create a global uniform buffer
+	addUniformBuffer(context: WebGL2RenderingContext, name: string, size: number, slot: number): void {
+		if (!Program._uniform_buffers.get(name)) {
+			Program._uniform_buffers.set(name, new UniformBuffer(context, size, slot));
+		}
+		const index = context.getUniformBlockIndex(this._program, name);
+		if (index != WebGL2RenderingContext.INVALID_INDEX)
+			context.uniformBlockBinding(this._program, index, slot);
+	}
+
+	// Update the data of a global uniform buffer
+	updateUniformBuffer<T extends ArrayBufferView>(context: WebGL2RenderingContext, name: string, data: T): void {
+		Program.updateUniformBuffer(context, name, data);
+	}
+
+	static updateUniformBuffer<T extends ArrayBufferView>(context: WebGL2RenderingContext, name: string, data: T): void {
+		var buffer: UniformBuffer = Program._uniform_buffers.get(name);
 		if (buffer) {
 			buffer.updateData(context, data);
 		}
 		else {
-			console.warn("Attempting to update data of uniform \"" + name + "\", but it has not yet been added with Program.addUniform().");
+			console.warn("Attempting to update data of uniform \"" + name + "\", but it has not yet been added with Program.addUniformBuffer().");
 		}
 	}
 }

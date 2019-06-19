@@ -30,7 +30,7 @@ export class ForwardPass {
 		this.uploadCameraData(camera, camera_transform);
 
 		// Update light buffers
-		this._light_pass.updateLightBuffer(scene, this._program);
+		this._light_pass.updateLightBuffer(scene);
 
 		scene.ecs.forEach([Model, Transform], (entity: Entity) => {
 			var model: Model = entity.getComponent(Model);
@@ -55,7 +55,7 @@ export class ForwardPass {
 		buffer.camera_to_projection = camera.camera_to_projection_matrix;
 		mat4.invert(buffer.projection_to_camera, buffer.camera_to_projection);
 		
-		this._program.updateUniform(this._context, "Camera", buffer.data);
+		this._program.updateUniformBuffer(this._context, "Camera", buffer.data);
 	}
 
 	private uploadModelData(model: Model, transform: Transform): void {
@@ -69,6 +69,6 @@ export class ForwardPass {
 
 		buffer.material = model.material;
 
-		this._program.updateUniform(this._context, "Model", buffer.data);
+		this._program.updateUniformBuffer(this._context, "Model", buffer.data);
 	}
 }
