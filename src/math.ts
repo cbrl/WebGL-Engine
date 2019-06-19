@@ -1,6 +1,18 @@
 import { vec3 } from "gl-matrix";
 import { Vertex, VertexPositionNormalColor } from "./rendering/vertex";
 
+export function randomRange(min: number, max: number): number {
+	return (Math.random() * (max - min)) + min;
+}
+
+// Returns a random integer in the range [min, max)
+export function randomInt(min: number, max: number): number {
+	min = Math.ceil(min);
+	max = Math.floor(max);
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
+
 export function minMaxPoint(vertices: Vertex[]): [vec3, vec3] {
 	var min: vec3 = vec3.fromValues(Infinity, Infinity, Infinity);
 	var max: vec3 = vec3.fromValues(-Infinity, -Infinity, -Infinity);
