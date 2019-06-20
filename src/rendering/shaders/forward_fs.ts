@@ -279,7 +279,7 @@ void CalculateLight(DirectionalLight light, vec3 p_world, out vec3 p_to_light, o
 	p_ndc = PerspectiveDiv(p_clip);
 
 	// Illuminate the point if it is within the light's NDC space
-	if (all(lessThan(abs(p_ndc), vec3(1.0f))) && (p_ndc.z >= 0.0f))
+	if (all(lessThan(abs(p_ndc), vec3(1.0f))) && (p_ndc.z <= 0.0f))
 		irradiance = light.intensity;
 	else
 		irradiance = vec3(0.0f);
