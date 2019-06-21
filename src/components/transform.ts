@@ -38,7 +38,7 @@ class Transform3D {
 
 	set translation(units: vec3) {
 		this.setDirty();
-		this._translation = units;
+		vec3.copy(this._translation, units);
 	}
 
 	rotateX(rad: number): void {
@@ -67,7 +67,7 @@ class Transform3D {
 
 	set rotation(rotation_quat: quat) {
 		this.setDirty();
-		this._rotation = rotation_quat;
+		quat.copy(this._rotation, rotation_quat);
 	}
 
 	set euler_angles(degrees: vec3) {
@@ -102,7 +102,7 @@ class Transform3D {
 	
 	set scale(units: vec3) {
 		this.setDirty();
-		this._scale = units;
+		vec3.copy(this._scale, units);
 	}
 
 	get world_axis_x(): vec3 {
